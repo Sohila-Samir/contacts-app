@@ -1,0 +1,32 @@
+.no-contacts-container {
+	margin-inline: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.no-contacts-img-container {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.no-contacts-img {
+	width: 80%;
+}
+
+@media screen and (min-width: 1024px) {
+	.no-contacts-container {
+		margin-top: 5rem;
+		flex-direction: row;
+	}
+
+	.no-contacts-img-container {
+		width: 55%;
+	}
+
+	.no-contacts-img {
+		width: 75%;
+	}
+}
