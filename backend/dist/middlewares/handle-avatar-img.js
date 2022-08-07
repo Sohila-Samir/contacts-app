@@ -18,31 +18,38 @@ const path_1 = __importDefault(require("path"));
 const ExpressError_1 = __importDefault(require("../utils/ExpressError"));
 const handleContactAvatarImg = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    const imgWidth = 100;
-    const imgHeight = 100;
-    const uniqueSuffix = Date.now();
-    const uploadDirPath = path_1.default.join(__dirname, '..', 'uploads', 'avatar');
-    if (req.file) {
-        const imgStorageName = `/${uniqueSuffix}.${(_a = req.file) === null || _a === void 0 ? void 0 : _a.originalname}`;
-        fs_1.default.mkdir(uploadDirPath, { recursive: true }, (err) => {
-            var _a;
-            err && err instanceof Error
-                ? new ExpressError_1.default(err.message, 500, err.name)
-                : (0, sharp_1.default)((_a = req.file) === null || _a === void 0 ? void 0 : _a.buffer)
-                    .resize(imgWidth, imgHeight)
-                    .toFormat('png')
-                    .png({
-                    force: true,
-                    quality: 100,
-                })
-                    .toFile(uploadDirPath + imgStorageName)
-                    .catch((err) => new ExpressError_1.default(`sharp error | ${err.message}`, 500, err.name));
-        });
-        res.locals.avatarURL = `/avatar${imgStorageName}`;
-        next();
+    try {
+        if (req.file) {
+            const imgWidth = 100;
+            const imgHeight = 100;
+            const uniqueSuffix = Date.now();
+            const uploadDirPath = path_1.default.join(__dirname, '..', 'uploads', 'avatar');
+            const imgStorageName = `/${uniqueSuffix}.${(_a = req.file) === null || _a === void 0 ? void 0 : _a.originalname}`;
+            fs_1.default.mkdir(uploadDirPath, { recursive: true }, (err) => {
+                var _a;
+                err && err instanceof Error
+                    ? new ExpressError_1.default(err.message, 500, err.name)
+                    : (0, sharp_1.default)((_a = req.file) === null || _a === void 0 ? void 0 : _a.buffer)
+                        .resize(imgWidth, imgHeight)
+                        .toFormat('png')
+                        .png({
+                        force: true,
+                        quality: 100,
+                    })
+                        .toFile(uploadDirPath + imgStorageName)
+                        .catch((err) => new ExpressError_1.default(`sharp error | ${err.message}`, 500, err.name));
+            });
+            req.body.avatarURL = `/avatar${imgStorageName}`;
+            next();
+        }
+        else {
+            next();
+        }
     }
-    else {
-        next(new ExpressError_1.default('`req.file` is undefined', 400));
+    catch (err) {
+        err && err instanceof Error
+            ? next(new ExpressError_1.default(err.message, 500, err.name))
+            : '';
     }
 });
 exports.default = handleContactAvatarImg;

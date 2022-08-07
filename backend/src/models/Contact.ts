@@ -36,7 +36,7 @@ const contactsSchema = new Schema({
 	},
 });
 
-const ContactsModel = mongoose.model('Contact', contactsSchema);
+export const ContactsModel = mongoose.model('Contact', contactsSchema);
 
 export class Contact {
 	async index(): Promise<contactType[] | undefined> {
@@ -73,18 +73,20 @@ export class Contact {
 		}
 	}
 
-	// async update(
-	// 	contactID: string,
-	// 	contact: contactType
-	// ): Promise<contactType | undefined | null> {
-	// 	try {
-	// 		const updatedContact: contactType | null =
-	// 			await ContactsModel.findByIdAndUpdate(contactID, contact);
-	// 		return updatedContact;
-	// 	} catch (err: unknown) {
-	// 		err instanceof Error
-	// 			? new ExpressError(err.message, undefined, err.name)
-	// 			: '';
-	// 	}
-	// }
+	async update(
+		contactID: string,
+		contact: contactType
+	): Promise<contactType | undefined | null> {
+		try {
+			const updatedContact: contactType | null =
+				await ContactsModel.findByIdAndUpdate(contactID, contact, {
+					new: true,
+				});
+			return updatedContact;
+		} catch (err: unknown) {
+			err instanceof Error
+				? new ExpressError(err.message, undefined, err.name)
+				: '';
+		}
+	}
 }

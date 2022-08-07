@@ -29,7 +29,7 @@ app.get('*', (req, res) => {
 app.use((err, req, res, next) => {
     console.log(`ERROR WAS CAUGHT: ${err.message} | ${err.name}`);
     res.json({
-        error: true,
+        success: false,
         message: `ERROR WAS CAUGHT: ${err.message} | ${err.name}`,
     });
 });

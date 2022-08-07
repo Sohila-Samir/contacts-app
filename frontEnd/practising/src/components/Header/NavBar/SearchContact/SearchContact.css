@@ -1,0 +1,57 @@
+.search-contact-input-box {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: var(--main-color);
+	padding: 0.8em;
+}
+
+.search-contact-icon {
+	display: inline-block;
+	width: 35px;
+	height: 35px;
+	background-repeat: no-repeat;
+	background-image: url('./search.svg');
+	filter: brightness(2);
+	-webkit-filter: brightness(2);
+}
+
+.search-contact-input {
+	background-color: transparent;
+	height: 100%;
+	width: 100%;
+	outline: none;
+	border: none;
+	font-size: 1.1rem;
+	margin-left: 0.5em;
+	color: var(--main-text-color);
+}
+
+.search-contact-input::placeholder {
+	color: var(--main-text-color);
+}
+
+.query-info-box {
+	margin-top: 2rem;
+	text-align: center;
+}
+
+.add-contact-btn {
+	width: 35px;
+	height: 35px;
+	background-image: url('./add-person.svg');
+	background-repeat: no-repeat;
+	filter: brightness(2);
+	-webkit-filter: brightness(2);
+}
+
+.show-all-contacts-btn {
+	outline: none;
+	border: none;
+	background: none;
+	color: var(--main-color);
+	margin-left: 6px;
+	font-size: 1rem;
+	font-weight: 600;
+	cursor: pointer;
+}

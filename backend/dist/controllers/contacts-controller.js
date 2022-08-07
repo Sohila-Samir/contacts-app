@@ -9,13 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteContact = exports.addContact = exports.getAllContacts = void 0;
+exports.updateContact = exports.deleteContact = exports.addContact = exports.getAllContacts = void 0;
 const Contact_1 = require("../models/Contact");
 const contact = new Contact_1.Contact();
 const getAllContacts = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const all = yield contact.index();
-        res.status(200).json(all);
+        res.status(200).json({ success: true, data: all });
     }
     catch (err) {
         next(err);
@@ -24,9 +24,8 @@ const getAllContacts = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
 exports.getAllContacts = getAllContacts;
 const addContact = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const newContact = yield contact.create(Object.assign(Object.assign({}, req.body), { avatarURL: res.locals.avatarURL }));
+        const newContact = yield contact.create(req.body);
         console.log('created contact: ', newContact);
-        console.log('contact body: ', req.body);
         res.status(201).json({ success: true, data: newContact });
     }
     catch (err) {
@@ -38,12 +37,25 @@ const deleteContact = (req, res, next) => __awaiter(void 0, void 0, void 0, func
     try {
         const { id } = req.params;
         const deletedContact = yield contact.delete(id);
-        res.locals.deletedContact = deletedContact;
-        next();
+        res.status(200).json({ success: true, data: deletedContact });
     }
     catch (e) {
         next(e);
     }
 });
 exports.deleteContact = deleteContact;
+const updateContact = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const updatedContact = yield contact.update(id, req.body);
+        res.status(200).json({
+            success: true,
+            data: updatedContact,
+        });
+    }
+    catch (e) {
+        next(e);
+    }
+});
+exports.updateContact = updateContact;
 //# sourceMappingURL=contacts-controller.js.map

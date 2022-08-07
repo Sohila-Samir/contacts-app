@@ -1,5 +1,9 @@
-import SearchContact from "./SearchContact"
-// import { useState } from "react"
+import { Fragment } from "react"
+
+import SearchContact from "./SearchContact/SearchContact"
+
+import './NavBar.css'
+
 const NavBar = ({ query, contacts, onSetQueriedContacts, onSetQuery }) => {
   // const [navLinks, setNavLinks] = useState(['link1', 'link2', 'link3'])
 
@@ -15,14 +19,14 @@ const NavBar = ({ query, contacts, onSetQueriedContacts, onSetQuery }) => {
           }
         </ul>
       </div> */}
-      <div>
+      <Fragment>
         <SearchContact
           query={query}
           contacts={contacts}
           onSetQueriedContacts={onSetQueriedContacts}
           onSetQuery={onSetQuery}
         />
-      </div>
+      </Fragment>
     </nav>
   )
 }

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Contact = void 0;
+exports.Contact = exports.ContactsModel = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const ExpressError_1 = __importDefault(require("../utils/ExpressError"));
 const Schema = mongoose_1.default.Schema;
@@ -35,12 +35,12 @@ const contactsSchema = new Schema({
         type: {},
     },
 });
-const ContactsModel = mongoose_1.default.model('Contact', contactsSchema);
+exports.ContactsModel = mongoose_1.default.model('Contact', contactsSchema);
 class Contact {
     index() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const all = yield ContactsModel.find();
+                const all = yield exports.ContactsModel.find();
                 return all;
             }
             catch (err) {
@@ -53,7 +53,7 @@ class Contact {
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const deletedRecord = yield ContactsModel.findByIdAndDelete(id);
+                const deletedRecord = yield exports.ContactsModel.findByIdAndDelete(id);
                 return deletedRecord;
             }
             catch (err) {
@@ -66,8 +66,23 @@ class Contact {
     create(contact) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const newContact = yield ContactsModel.create(contact);
+                const newContact = yield exports.ContactsModel.create(contact);
                 return newContact;
+            }
+            catch (err) {
+                err instanceof Error
+                    ? new ExpressError_1.default(err.message, undefined, err.name)
+                    : '';
+            }
+        });
+    }
+    update(contactID, contact) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const updatedContact = yield exports.ContactsModel.findByIdAndUpdate(contactID, contact, {
+                    new: true,
+                });
+                return updatedContact;
             }
             catch (err) {
                 err instanceof Error

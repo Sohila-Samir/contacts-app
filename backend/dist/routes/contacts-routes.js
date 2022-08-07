@@ -33,6 +33,7 @@ const remove_avatar_img_1 = __importDefault(require("../middlewares/remove-avata
 const router = express_1.default.Router();
 router.get('/', contactsControllers.getAllContacts);
 router.post('/new', handle_avatar_img_1.default, contactsControllers.addContact);
-router.delete('/:id/delete', contactsControllers.deleteContact, remove_avatar_img_1.default);
+router.put('/:id/update', remove_avatar_img_1.default, handle_avatar_img_1.default, contactsControllers.updateContact);
+router.delete('/:id/delete', remove_avatar_img_1.default, contactsControllers.deleteContact);
 exports.default = router;
 //# sourceMappingURL=contacts-routes.js.map

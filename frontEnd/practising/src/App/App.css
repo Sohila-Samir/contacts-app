@@ -1,0 +1,47 @@
+:root {
+	--main-color: #182449;
+	--main-bg-color: #f8f8f8;
+	--main-text-color: #f8f8f8;
+	--secondary-color: #c6d5d7;
+	--secondary-bg-btn: #87b0a2;
+	--input-placeholder: #65677c;
+	--list-item-text: #1d2849;
+}
+
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+	position: relative;
+	font-family: 'Quicksand', serif;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span {
+	text-transform: capitalize;
+}
+
+body {
+	min-height: 100vh;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+		'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+		'Helvetica Neue', sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+body {
+	min-height: 100vh;
+	background-color: var(--main-bg-color);
+}
+
+.App {
+	text-align: center;
+	min-height: 100vh;
+}

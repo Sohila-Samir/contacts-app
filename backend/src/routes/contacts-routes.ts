@@ -10,10 +10,17 @@ router.get('/', contactsControllers.getAllContacts);
 
 router.post('/new', handleImage, contactsControllers.addContact);
 
+router.put(
+	'/:id/update',
+	removeContactAvatarImg,
+	handleImage,
+	contactsControllers.updateContact
+);
+
 router.delete(
 	'/:id/delete',
-	contactsControllers.deleteContact,
-	removeContactAvatarImg
+	removeContactAvatarImg,
+	contactsControllers.deleteContact
 );
 
 export default router;

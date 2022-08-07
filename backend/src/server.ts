@@ -49,7 +49,7 @@ app.use(
 	) => {
 		console.log(`ERROR WAS CAUGHT: ${err.message} | ${err.name}`);
 		res.json({
-			error: true,
+			success: false,
 			message: `ERROR WAS CAUGHT: ${err.message} | ${err.name}`,
 		});
 	}

@@ -15,14 +15,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const ExpressError_1 = __importDefault(require("../utils/ExpressError"));
+const Contact_1 = require("../models/Contact");
 const removeContactAvatarImg = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const contactAvatarImgPath = path_1.default.join(__dirname, '..', 'uploads', res.locals.deletedContact.avatarURL);
-    fs_1.default.unlink(contactAvatarImgPath, (err) => {
-        if (err && err instanceof Error) {
-            return next(new ExpressError_1.default(err.message, 400, err.name));
+    try {
+        if ((Object.values(req.body).length && req.file) ||
+            (!Object.values(req.body).length && !req.file)) {
+            const { id } = req.params;
+            const contact = yield Contact_1.ContactsModel.findById(id);
+            const contactAvatarImgPath = path_1.default.join(__dirname, '..', 'uploads', contact === null || contact === void 0 ? void 0 : contact.avatarURL);
+            fs_1.default.unlink(contactAvatarImgPath, (err) => {
+                if (err && err instanceof Error) {
+                    return next(new ExpressError_1.default(err.message, 400, err.name));
+                }
+            });
         }
-        res.status(200).json(res.locals.deletedContact);
-    });
+        next();
+    }
+    catch (err) {
+        err && err instanceof Error ? next(err) : '';
+    }
 });
 exports.default = removeContactAvatarImg;
 //# sourceMappingURL=remove-avatar-img.js.map

@@ -1,5 +1,7 @@
 import NavBar from './NavBar/NavBar'
-import './../../css/Header.css'
+
+import './Header.css'
+
 const Header = ({ query, contacts, onSetQueriedContacts, onSetQuery }) => {
   return (
     <header>

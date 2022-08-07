@@ -1,0 +1,7 @@
+.heading {
+	margin: 2rem;
+	margin-top: 0;
+	padding-bottom: 0.5em;
+	color: var(--main-color);
+	border-bottom: 4px dotted;
+}
