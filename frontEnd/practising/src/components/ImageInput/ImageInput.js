@@ -42,6 +42,7 @@ const ImageInput = ({ onHandleDataToUseChange, dataToUse, setDataToUse }) => {
       <div className="contact-form-avatar">
         {!imageURL && !dataToUse?.imgURL
           ? <span
+              role={"img"}
               className="contact-form-avatar-preview"
               alt="avatar"
             ></span>

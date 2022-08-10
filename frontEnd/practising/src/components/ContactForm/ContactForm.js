@@ -46,7 +46,7 @@ const ContactForm = ({ setContacts, contacts, formActionHandler, formHeadingText
         if (newData.data) {
           const filterContacts = contacts.filter(contact => contact._id !== newData.data._id)
           setContacts([...filterContacts, newData.data])
-          navigate('/', { replace: true })
+          navigate('/contacts', { replace: true })
         }
       })
     } else {
