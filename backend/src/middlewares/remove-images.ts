@@ -1,39 +1,37 @@
 import fs from 'fs';
 import path from 'path';
 import { Request, Response, NextFunction } from 'express';
-import ExpressError from '../utils/ExpressError';
 import { ContactsModel } from '../models/Contact';
+import ExpressError from '../utils/ExpressError';
 
-const removeContactAvatarImg = async (
+const removeImage = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
 ): Promise<void> => {
 	try {
+		const { id } = req.params;
+		const contact = await ContactsModel.findById(id);
 		if (
-			(Object.values(req.body).length && req.file) ||
-			(!Object.values(req.body).length && !req.file)
+			!(req.body && !req.file && contact && !contact.imgURL) ||
+			!(!req.body && contact && !contact.imgURL)
 		) {
-			const { id } = req.params;
-			const contact = await ContactsModel.findById(id);
-
 			const contactAvatarImgPath: string = path.join(
 				__dirname,
 				'..',
 				'uploads',
-				contact?.avatarURL as string
+				contact?.imgURL as string
 			);
 
 			fs.unlink(contactAvatarImgPath, (err: unknown) => {
-				if (err && err instanceof Error) {
-					return next(new ExpressError(err.message, 400, err.name));
-				}
+				next();
 			});
+		} else {
+			next();
 		}
-		next();
 	} catch (err: unknown) {
 		err && err instanceof Error ? next(err) : '';
 	}
 };
 
-export default removeContactAvatarImg;
+export default removeImage;

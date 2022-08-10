@@ -1,0 +1,27 @@
+.loading-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 90vh;
+	background-color: #aaa7f2;
+	height: 100vh;
+}
+
+.loading-icon {
+	font-size: 2rem;
+	letter-spacing: 8px;
+	color: #0d0d0d;
+	text-transform: capitalize;
+	animation: fade 2.3s ease-in-out forwards infinite;
+	-webkit-animation: fade 2.3s ease-in-out forwards infinite;
+}
+
+@keyframes fade {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.3;
+	}
+}

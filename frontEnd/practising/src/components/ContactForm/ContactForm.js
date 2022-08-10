@@ -6,6 +6,7 @@ import Heading from "./../Main/Heading/Heading";
 import Button from "../Main/Button/Button";
 import ImageInput from "./../ImageInput/ImageInput";
 import PhoneNumber from "./../PhoneNumber/PhoneNumber";
+import FormInput from "../Main/FormInput/FormInput";
 
 import './ContactForm.css'
 
@@ -21,7 +22,7 @@ const ContactForm = ({ setContacts, contacts, formActionHandler, formHeadingText
       return {
         name: "",
         handle: "",
-        avatarURL: "",
+        imgURL: "",
         phoneNumberInfo: {
           internationalNumber: "",
           nationalNumber: "",
@@ -34,7 +35,7 @@ const ContactForm = ({ setContacts, contacts, formActionHandler, formHeadingText
   const [dataToUse, setDataToUse] = useState(chooseDataToUse())
 
   useEffect(() => {
-    if (isWantToSubmit && Object.values(dataToUse.phoneNumberInfo)[0]) {
+    if (isWantToSubmit && dataToUse.phoneNumberInfo) {
       const makeRequest = async () => {
         const res = await formActionHandler(dataToUse)
         return res
@@ -45,7 +46,7 @@ const ContactForm = ({ setContacts, contacts, formActionHandler, formHeadingText
         if (newData.data) {
           const filterContacts = contacts.filter(contact => contact._id !== newData.data._id)
           setContacts([...filterContacts, newData.data])
-          navigate('/')
+          navigate('/', { replace: true })
         }
       })
     } else {
@@ -66,7 +67,7 @@ const ContactForm = ({ setContacts, contacts, formActionHandler, formHeadingText
 
   return(
     <div className="contact-form-container">
-      <Link className="close-contact-form " to="/"></Link>
+      <Link className="close-contact-form " to="/contacts"></Link>
 
       <Heading text={formHeadingText}/>
 
@@ -83,31 +84,30 @@ const ContactForm = ({ setContacts, contacts, formActionHandler, formHeadingText
           onHandleDataToUseChange={onHandleDataToUseChange}
           setDataToUse={setDataToUse}
         />
-
         <div className="contact-form-details-container">
-          <input
-            className="contact-form-input-field"
+          <FormInput
+            className="form-input-field"
             type="text"
             name="name"
             placeholder="Name"
             value={dataToUse?.name}
-            onChange={onHandleDataToUseChange}
-            required={true}
+            onChangeHandlerFN={onHandleDataToUseChange}
+            isRequired={true}
           />
 
-          <input
-            className="contact-form-input-field"
+          <FormInput
+            className="form-input-field"
             type="text"
             name="handle"
             placeholder="Handle"
             value={dataToUse?.handle}
-            onChange={onHandleDataToUseChange}
-            required={true}
+            onChangeHandlerFN={onHandleDataToUseChange}
+            isRequired={true}
           />
 
           <PhoneNumber setDataToUse={setDataToUse} dataToUse={dataToUse} />
 
-          <Button type="submit" text={formHeadingText} isSecondary={false} />
+          <Button type="submit" text={formHeadingText} isSecondary={false} className="submit-contact-form-btn" />
         </div>
       </form>
     </div>

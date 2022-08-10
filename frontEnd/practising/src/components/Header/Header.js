@@ -1,16 +1,10 @@
-import NavBar from './NavBar/NavBar'
+// import NavBar from './NavBar/NavBar'
 
 import './Header.css'
 
-const Header = ({ query, contacts, onSetQueriedContacts, onSetQuery }) => {
+const Header = ({ }) => {
   return (
     <header>
-      <NavBar
-        query={query}
-        contacts={contacts}
-        onSetQueriedContacts={onSetQueriedContacts}
-        onSetQuery={onSetQuery}
-      />
     </header>
   )
 }

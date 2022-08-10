@@ -1,13 +1,3 @@
-:root {
-	--main-color: #182449;
-	--main-bg-color: #f8f8f8;
-	--main-text-color: #f8f8f8;
-	--secondary-color: #c6d5d7;
-	--secondary-bg-btn: #87b0a2;
-	--input-placeholder: #65677c;
-	--list-item-text: #1d2849;
-}
-
 * {
 	box-sizing: border-box;
 	padding: 0;
@@ -38,7 +28,7 @@ body {
 
 body {
 	min-height: 100vh;
-	background-color: var(--main-bg-color);
+	background-color: #ebedf2;
 }
 
 .App {

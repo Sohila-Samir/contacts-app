@@ -10,9 +10,11 @@ const PhoneNumber = ({ setDataToUse, dataToUse }) => {
   const [value, setValue] = useState('')
   const [parsedPhoneNum, setParsedPhoneNum] = useState('')
 
+  const getCountry = dataToUse?.phoneNumberInfo?.countryCode ? dataToUse?.phoneNumberInfo?.countryCode: "EG"
+
   useEffect(() => {
-    if (dataToUse.phoneNumberInfo.internationalNumber) {
-      setValue(dataToUse.phoneNumberInfo.internationalNumber)
+    if (dataToUse?.phoneNumberInfo?.internationalNumber) {
+      setValue(dataToUse?.phoneNumberInfo?.internationalNumber)
     }
     return () => {}
   }, [])
@@ -23,9 +25,10 @@ const PhoneNumber = ({ setDataToUse, dataToUse }) => {
       && isPossiblePhoneNumber(value)
       && typeof value === 'string'
     ) {
+      console.log('valid number');
       setParsedPhoneNum(prevState => ({...prevState, ...parsePhoneNumber(value)}))
     } else {
-      setDataToUse(prevState => ({...prevState, phoneNumberInfo: {}}))
+      setDataToUse(prevState => ({...prevState, phoneNumberInfo: null}))
     }
   }, [value])
 
@@ -38,8 +41,6 @@ const PhoneNumber = ({ setDataToUse, dataToUse }) => {
       }}))
     }
   }, [parsedPhoneNum])
-
-  const getCountry = dataToUse?.phoneNumberInfo.countryCode ? dataToUse?.phoneNumberInfo.countryCode: "EG"
 
   return (
     <PhoneInput

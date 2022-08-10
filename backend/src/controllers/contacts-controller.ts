@@ -24,8 +24,6 @@ const addContact = async (
 ): Promise<void> => {
 	try {
 		const newContact = await contact.create(req.body);
-		console.log('created contact: ', newContact);
-
 		res.status(201).json({ success: true, data: newContact });
 	} catch (err) {
 		next(err);

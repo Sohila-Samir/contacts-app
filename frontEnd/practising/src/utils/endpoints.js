@@ -16,6 +16,7 @@ export const deleteContact = async (id) => {
       url: `${url}/api/contacts/${id}/delete`,
       method: "DELETE"
     })
+    console.log('delete response',res.data);
     return await res.data
   }catch(e) {
     console.log(e);
@@ -32,6 +33,7 @@ export const createContact = async (data) => {
         "Content-Type": "multipart/form-data",
       },
     })
+    console.log('create response',res.data);
     return await res.data
   }catch(e) {
     console.log(e);
@@ -48,6 +50,7 @@ export const updateContact = async (data) => {
         "Content-Type": "multipart/form-data",
       },
     })
+    console.log('update response',res.data);
     return await res.data
   }catch(e) {
     console.log(e);

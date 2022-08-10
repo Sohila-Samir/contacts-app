@@ -4,26 +4,29 @@ import './Button.css'
 
 const Button = ({
   text,
+  custom,
+  className,
   handleFunction,
   type = "button",
   isSecondary = true,
-  isLink = false,
-  URL = 'http://localhost:300/'
 }) => {
+  const classNameDefault = !isSecondary && !custom
+  ? "main" : !custom && isSecondary
+  ? "secondary"
+  : ""
+
   return (
-    isLink
-    ? <Link to={URL} className={isSecondary ? 'btn secondary' : 'btn main'}>{text}</Link>
-    : handleFunction
+    handleFunction
     ? <button
         type={type}
         onClick={handleFunction}
-        className={isSecondary ? 'btn secondary' : 'btn main'
-      }>{text}
+        className={`${classNameDefault} btn ${className}`}
+      >{text}
       </button>
     : <button
         type={type}
-        className={isSecondary ? 'btn secondary' : 'btn main'
-      }>{text}
+        className={`${classNameDefault} btn ${className}`}
+      >{text}
       </button>
   )
 }

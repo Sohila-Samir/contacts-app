@@ -1,41 +1,19 @@
-import ListContacts from "../../components/ListContacts/ListContacts"
 import Header from "../../components/Header/Header"
-import NoContacts from '../errors/NoContacts/NoContacts'
-import Heading from "../../components/Main/Heading/Heading"
 
-import './Home.css'
 import { Fragment } from "react"
+import CustomLink from "../../components/Main/CustomLink/CustomLink"
+import './Home.css'
 
-const Home = ({
-  query,
-  contactsToShow,
-  contacts,
-  onSetQuery,
-  setContacts,
-  onSetQueriedContacts,
-}) => {
+const Home = () => {
   return (
     <Fragment>
-      <Header
+      {/* <Header
         query={query}
         contacts={contacts}
         onSetQueriedContacts={onSetQueriedContacts}
         onSetQuery={onSetQuery}
-      />
-      <main>
-        {
-          !contactsToShow.length
-          ? <NoContacts />
-          : <Heading text="Current Contacts"/>
-        }
-
-        <ListContacts
-          contactsToShow={contactsToShow}
-          contacts={contacts}
-          setContacts={setContacts}
-          onSetQueriedContacts={onSetQueriedContacts}
-        />
-      </main>
+      /> */}
+      <CustomLink URL="/contacts" isSecondary={false} className="contacts-link" text="Show Contacts" custom={true} />
     </Fragment>
   )
 

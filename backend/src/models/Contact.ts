@@ -1,12 +1,11 @@
 import mongoose from 'mongoose';
+import { Schema } from 'mongoose';
 import ExpressError from '../utils/ExpressError';
-
-const Schema = mongoose.Schema;
 
 export type contactType = {
 	name: string;
 	handle: string;
-	avatarURL: string;
+	imgURL?: string;
 	phoneNumberInfo: phoneInputType;
 };
 
@@ -26,9 +25,9 @@ const contactsSchema = new Schema({
 		type: String,
 		required: true,
 	},
-	avatarURL: {
+	imgURL: {
 		type: String,
-		required: true,
+		default: null,
 	},
 	phoneNumberInfo: {
 		required: true,

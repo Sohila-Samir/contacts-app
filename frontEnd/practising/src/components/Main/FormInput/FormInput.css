@@ -1,0 +1,15 @@
+.form-input-field {
+	margin-bottom: 3rem;
+	padding: 1em;
+	background-color: var(--main-bg-color);
+	color: #f9f7ff;
+	outline: none;
+	border: none;
+	border-bottom: 1px solid #f9f7ff;
+	font-weight: 600;
+}
+
+.form-input-field::placeholder {
+	font-weight: 600;
+	color: #e5e3ea;
+}

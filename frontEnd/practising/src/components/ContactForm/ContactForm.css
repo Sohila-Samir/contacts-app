@@ -1,5 +1,4 @@
 .contact-form-container {
-	height: 100vh;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -9,11 +8,11 @@
 
 .close-contact-form {
 	position: absolute;
-	left: 0.5em;
-	top: 1.2em;
+	left: 0.5rem;
+	top: 0;
 	width: 40px;
 	height: 40px;
-	background-image: url('./arrow-back.svg');
+	background-image: url('./assets/arrow-back.svg');
 	background-repeat: no-repeat;
 	background-size: contain;
 	filter: contrast(0.1);
@@ -29,12 +28,9 @@
 	margin: 1rem;
 	padding-block: 3em;
 	background-color: var(--secondary-color);
-	box-shadow: silver 0px 0px 35px;
+	box-shadow: #8e8e8e 0px 0px 25px, #eee 0px 0px 25px;
 	border-radius: 10px;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	-ms-border-radius: 10px;
-	-o-border-radius: 10px;
+	background-color: #6f6bf2;
 }
 
 .contact-form::before {
@@ -45,50 +41,31 @@
 	height: 90px;
 	right: -45px;
 	top: -45px;
-	background: linear-gradient(39deg, #0a1536 20%, #87b0a2 80%);
+	background: linear-gradient(
+		35deg,
+		rgb(237 237 237) 20%,
+		rgb(211 211 211) 80%
+	);
 }
 
 .contact-form::after {
 	content: '';
 	position: absolute;
 	clip-path: circle(50%);
-	width: 70px;
-	height: 70px;
-	bottom: -35px;
-	left: -35px;
-	background: linear-gradient(213deg, #0a1536 20%, #87b0a2 80%);
+	width: 60px;
+	height: 60px;
+	bottom: -30px;
+	left: -30px;
+	background: linear-gradient(
+		225deg,
+		rgb(237 237 237) 20%,
+		rgb(211 211 211) 80%
+	);
 }
 
 .contact-form-details-container {
 	display: flex;
 	flex-direction: column;
-}
-
-.contact-form-input-field {
-	margin-bottom: 2em;
-	padding: 1em;
-	background-color: var(--main-bg-color);
-	color: var(--main-color);
-	outline: none;
-	border: 2px solid transparent;
-	border-radius: 3px;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	-ms-border-radius: 3px;
-	-o-border-radius: 3px;
-	transition: border 0.3s ease-in-out;
-	-webkit-transition: border 0.3s ease-in-out;
-	-moz-transition: border 0.3s ease-in-out;
-	-ms-transition: border 0.3s ease-in-out;
-	-o-transition: border 0.3s ease-in-out;
-}
-
-.contact-form-input-field::placeholder {
-	color: var(--input-placeholder);
-}
-
-.contact-form-input-field:focus {
-	border: 2px solid var(--secondary-bg-btn);
 }
 
 @media screen and (min-width: 768px) {

@@ -1,7 +1,16 @@
-main {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	height: 90vh;
+.contacts-link {
+	background-color: #ed143d;
+	color: #f7fcff;
+	transition: all 0.2 ease;
+	-webkit-transition: all 0.2 ease;
+	-moz-transition: all 0.2 ease;
+	-ms-transition: all 0.2 ease;
+	-o-transition: all 0.2 ease;
+}
+
+@media (hover: hover) {
+	.contacts-link:hover {
+		background-color: #af1430;
+		color: #f7fcff;
+	}
 }

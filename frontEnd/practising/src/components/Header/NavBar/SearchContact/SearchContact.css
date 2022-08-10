@@ -2,7 +2,7 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background-color: var(--main-color);
+	background-color: #0d0d0d;
 	padding: 0.8em;
 }
 
@@ -11,7 +11,7 @@
 	width: 35px;
 	height: 35px;
 	background-repeat: no-repeat;
-	background-image: url('./search.svg');
+	background-image: url('./assets/search.svg');
 	filter: brightness(2);
 	-webkit-filter: brightness(2);
 }
@@ -24,11 +24,11 @@
 	border: none;
 	font-size: 1.1rem;
 	margin-left: 0.5em;
-	color: var(--main-text-color);
+	color: #f9f7ff;
 }
 
 .search-contact-input::placeholder {
-	color: var(--main-text-color);
+	color: #f9f7ff;
 }
 
 .query-info-box {
@@ -39,7 +39,7 @@
 .add-contact-btn {
 	width: 35px;
 	height: 35px;
-	background-image: url('./add-person.svg');
+	background-image: url('./assets/add-person.svg');
 	background-repeat: no-repeat;
 	filter: brightness(2);
 	-webkit-filter: brightness(2);

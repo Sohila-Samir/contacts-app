@@ -8,12 +8,6 @@ const ImageInput = ({ onHandleDataToUseChange, dataToUse, setDataToUse }) => {
   const [imageURL, setImageURL] = useState('')
   const imageInput = useRef(null)
 
-  useEffect(() => {
-    dataToUse?.avatarURL
-    ? imageInput.current.required = false
-    : imageInput.current.required = true
-  }, [])
-
   const getAvatarImgDataUrl = (file) => {
     const reader = new FileReader()
     return new Promise((resolve) => {
@@ -24,8 +18,8 @@ const ImageInput = ({ onHandleDataToUseChange, dataToUse, setDataToUse }) => {
     })
   }
 
-  const imageToShow = typeof dataToUse?.avatarURL === 'string'
-  ? `http://localhost:2022${dataToUse?.avatarURL}`
+  const imageToShow = typeof dataToUse?.imgURL === 'string'
+  ? `http://localhost:2022${dataToUse?.imgURL}`
   : imageURL
 
   const handleImgChange = (e) => {
@@ -39,14 +33,14 @@ const ImageInput = ({ onHandleDataToUseChange, dataToUse, setDataToUse }) => {
   }
 
   const handleClearImg = (e) => {
-    setDataToUse(prevState => ({...prevState, avatarURL: ''}))
+    setDataToUse(prevState => ({...prevState, imgURL: ''}))
     setImageURL('')
   }
 
   return (
     <div className="contact-form-avatar-container">
       <div className="contact-form-avatar">
-        {!imageURL && !dataToUse?.avatarURL
+        {!imageURL && !dataToUse?.imgURL
           ? <span
               className="contact-form-avatar-preview"
               alt="avatar"
@@ -63,13 +57,18 @@ const ImageInput = ({ onHandleDataToUseChange, dataToUse, setDataToUse }) => {
           ref={imageInput}
           className="contact-form-avatar-input"
           type="file"
-          name="avatarURL"
+          name="imgURL"
           accept=".png, .jpeg, .jpg"
           onChange={handleImgChange}
-          required={true}
         />
       </div>
-      <Button handleFunction={handleClearImg} text="Clear Image" type="reset"/>
+
+      <Button
+        handleFunction={handleClearImg}
+        text="Clear Image"
+        type="reset"
+        className="clear-contact-avatar-form-btn"
+      />
     </div>
   )
 }

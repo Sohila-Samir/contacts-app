@@ -21,7 +21,14 @@ const DeleteContact = ({ contactID, contacts, setContacts, onSetQueriedContacts 
     setIsWantToDelete(true)
   }
 
-  return <Button handleFunction={handleFunction} text="Delete Contact"/>
+  return (
+    <Button
+      handleFunction={handleFunction}
+      className="delete-contact-btn"
+      custom={true}
+      isSecondary={false}
+    />
+  )
 };
 
 export default DeleteContact;

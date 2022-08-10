@@ -1,8 +1,8 @@
 import { IRouter } from 'express';
 import express from 'express';
 import * as contactsControllers from './../controllers/contacts-controller';
-import handleImage from '../middlewares/handle-avatar-img';
-import removeContactAvatarImg from '../middlewares/remove-avatar-img';
+import handleImage from '../middlewares/handle-images';
+import removeContactAvatarImg from '../middlewares/remove-images';
 
 const router: IRouter = express.Router();
 

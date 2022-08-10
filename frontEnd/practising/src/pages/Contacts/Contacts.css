@@ -1,6 +1,6 @@
-header {
+main {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	margin-bottom: 3rem;
+	align-items: center;
 }

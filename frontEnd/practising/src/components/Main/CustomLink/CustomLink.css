@@ -1,4 +1,4 @@
-.btn {
+.Link {
 	padding: 0.4rem;
 	text-decoration: none;
 	font-size: 1rem;
@@ -7,7 +7,6 @@
 	cursor: pointer;
 	outline: none;
 	border: none;
-	/* border-radius: 3px; */
 	transition: all 0.2s ease;
 }
 

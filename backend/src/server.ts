@@ -8,10 +8,12 @@ import path from 'path';
 import multer from 'multer';
 import connect from './config/database';
 import contactsRoutes from './routes/contacts-routes';
+import session, { SessionOptions } from 'express-session';
+import mongoStore from 'connect-mongo';
 import ExpressError from './utils/ExpressError';
 
 // start the application
-connect();
+const connection = connect();
 const port: number | string = process.env.PORT || 2022;
 const app: Application = express();
 
@@ -20,6 +22,16 @@ app.listen(port, () => {
 });
 
 // variables
+const sessionOptions = {
+	secret: 'thisisnotvalidsecret',
+	resave: false,
+	saveUninitialized: true,
+	httpOnly: true,
+	store: mongoStore.create({ clientPromise: connection, dbName: 'contacts' }),
+};
+
+// config session
+app.use(session(sessionOptions as unknown as SessionOptions));
 
 // multer config
 const storage = multer.memoryStorage();
@@ -33,7 +45,7 @@ app.use(cors());
 app.use(express.json());
 
 // using routes
-app.use('/api/contacts', upload.single('avatarURL'), contactsRoutes);
+app.use('/api/contacts', upload.single('imgURL'), contactsRoutes);
 
 // error handlers
 app.get('*', (req: Request, res: Response) => {
