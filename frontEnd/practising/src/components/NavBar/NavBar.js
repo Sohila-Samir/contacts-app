@@ -1,6 +1,6 @@
 import { Fragment } from "react"
 
-import SearchContact from "./SearchContact/SearchContact"
+import SearchContact from "../SearchContact/SearchContact"
 
 import './NavBar.css'
 

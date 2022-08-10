@@ -76,6 +76,16 @@ p.footer-about-brief {
 	padding: 0.5rem;
 }
 
+.links-container a {
+	width: fit-content;
+	padding-inline: 0;
+	padding-block: 0.5rem;
+}
+
+.links-container a:hover {
+	color: #aaa7f2;
+}
+
 .contact-us-container {
 	display: flex;
 	flex-direction: column;
@@ -88,7 +98,6 @@ p.footer-about-brief {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding-left: 0.5rem;
 }
 
 .contact-us-container h3 {
