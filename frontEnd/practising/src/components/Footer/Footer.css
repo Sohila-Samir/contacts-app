@@ -26,17 +26,6 @@ footer {
 	gap: 2rem;
 }
 
-.logo-container {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-span.brand-name {
-	letter-spacing: 5px;
-	font-size: 1.7rem;
-}
-
 p.footer-about-brief {
 	width: 240px;
 	color: #aaa5a5;
@@ -77,13 +66,14 @@ p.footer-about-brief {
 }
 
 .links-container a {
+	margin: auto;
 	width: fit-content;
 	padding-inline: 0;
-	padding-block: 0.5rem;
+	padding-block: 0.3rem;
 }
 
 .links-container a:hover {
-	color: #aaa7f2;
+	color: aquamarine;
 }
 
 .contact-us-container {
@@ -135,7 +125,7 @@ p.footer-about-brief {
 	.main-about-container {
 		flex-direction: row;
 		align-items: flex-start;
-		gap: 2.5rem;
+		gap: 0.5rem;
 	}
 
 	.contact-us-container {
@@ -143,9 +133,7 @@ p.footer-about-brief {
 	}
 
 	.links-container {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
 	}
 }

@@ -1,8 +1,8 @@
-import logo from './assets/logo.png'
 import gmailIcon from './assets/gmail.png'
 import mapIcon from './assets/map-marker.png'
 import phoneIcon from './assets/phone.png'
 
+import Logo from '../Main/Logo/Logo'
 import CustomLink from './../Main/CustomLink/CustomLink'
 import './Footer.css'
 
@@ -12,10 +12,7 @@ const Footer = () => {
       <div className="main-about-container">
 
         <div className='about-container'>
-          <div className="logo-container">
-            <img src={logo} className="footer-logo logo"></img>
-            <span className="brand-name">Conta</span>
-          </div>
+          <Logo />
 
           <p className='footer-about-brief'>Culpa do est laboris ad laboris. Pariatur incididunt id aliquip quis quis.
           Pariatur incididunt id aliquip quis quis.

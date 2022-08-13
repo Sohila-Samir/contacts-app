@@ -24,6 +24,15 @@
 	width: 80%;
 }
 
+.not-found-back-home-link {
+	background-color: #5852f2;
+	color: #f9f7ff;
+}
+
+.not-found-back-home-link:hover {
+	background-color: #4540ba;
+}
+
 @media screen and (min-width: 768px) and (max-width: 1024px) {
 	.not-found-img-container img {
 		width: 60%;

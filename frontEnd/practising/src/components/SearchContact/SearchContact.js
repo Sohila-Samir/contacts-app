@@ -1,50 +1,59 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from "react-router-dom"
+
+import CustomLink from './../Main/CustomLink/CustomLink'
 
 import './SearchContact.css'
 
-const SearchContact = ({ query, contacts, onSetQueriedContacts, onSetQuery }) => {
-  const searchContactInputRef = useRef(null)
+const SearchContact = ({ contacts }) => {
+  const [queriedContacts, setQueriedContacts] = useState([])
+	const [query, setQuery] = useState('')
 
-  useEffect(() => {
-    searchContactInputRef.current.focus()
-  }, [])
 
   const updateQuery = (e) => {
     const { value } = e.target
-    onSetQueriedContacts(contacts.filter(contact => contact.name.toLowerCase().includes(value.toLowerCase())))
-		onSetQuery(value)
+		setQuery(value)
+    setQueriedContacts(contacts.filter(contact => contact.name.toLowerCase().includes(value.toLowerCase())))
 	}
 
-  const showAll = () => {
-    onSetQuery('')
-    onSetQueriedContacts('')
+  const focus = (e) => {
+    document.querySelector('nav').classList.add('blur-content')
   }
 
-  const queryResultContactsLength = query.length
-  ? contacts.filter(contact => contact.name.toLowerCase().includes(query.toLowerCase())).length
-  : contacts.length
+  const blur = (e) => {
+    document.querySelector('nav').classList.remove('blur-content')
+  }
 
   return (
     <div className="search-contact-box">
 
-      <div className='search-contact-input-box'>
-        <span className="search-contact-icon"></span>
-        <input
-          className='search-contact-input'
-          placeholder='Search for a contact...'
-          ref={searchContactInputRef}
-          value={query}
-          onChange={updateQuery}
-        />
-        <Link to="/contacts/new" className="add-contact-btn"></Link>
-      </div>
+      <input
+        type="search"
+        className='search-contact-input'
+        placeholder='Search for a contact...'
+        value={query}
+        onChange={updateQuery}
+        onFocus={focus}
+        onBlur={blur}
+      />
 
       {
-        query.length && queryResultContactsLength
-        ? <div className='query-info-box'>
-            <span>Showing {queryResultContactsLength} from {contacts.length}</span>
-            <button className='show-all-contacts-btn' onClick={showAll}>Show All</button>
+        query.length && queriedContacts.length
+        ?
+          <div className='query-result-container'>
+            <ul className='query-result-list'>
+              {queriedContacts.map(contact =>
+                <li key={contact._id}>
+                  <CustomLink
+                    className="query-contact-link"
+                    isSecondary={false}
+                    custom={true}
+                    URL={`/contacts/${contact._id}`}
+                    text={contact.name}
+                  />
+                </li>
+              )}
+            </ul>
           </div>
         : ''
       }

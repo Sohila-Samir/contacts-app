@@ -1,0 +1,17 @@
+.logo-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.brand-name {
+	letter-spacing: 5px;
+	font-size: 1.5rem;
+	font-weight: 600;
+	color: #ebedf2;
+}
+
+.brand-name::first-letter {
+	color: #9895eb;
+	font-size: larger;
+}

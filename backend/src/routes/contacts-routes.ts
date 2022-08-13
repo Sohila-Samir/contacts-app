@@ -8,6 +8,8 @@ const router: IRouter = express.Router();
 
 router.get('/', contactsControllers.getAllContacts);
 
+router.get('/:id', contactsControllers.getContact);
+
 router.post('/new', handleImage, contactsControllers.addContact);
 
 router.put(

@@ -5,8 +5,17 @@ export const getContacts = async () => {
   try {
     const res = await axios({ url: `${url}/api/contacts` })
     return await res.data
-  }catch(e) {
-    console.log(e);
+  }catch(err) {
+    console.log(err.response);
+  }
+}
+
+export const getContact = async (id) => {
+  try {
+    const res = await axios({ url: `${url}/${id}` })
+    return await res.data
+  }catch(err) {
+    console.log(err.response);
   }
 }
 
@@ -18,8 +27,8 @@ export const deleteContact = async (id) => {
     })
     console.log('delete response',res.data);
     return await res.data
-  }catch(e) {
-    console.log(e);
+  }catch(err) {
+    console.log(err.response);
   }
 }
 
@@ -35,8 +44,8 @@ export const createContact = async (data) => {
     })
     console.log('create response',res.data);
     return await res.data
-  }catch(e) {
-    console.log(e);
+  }catch(err) {
+    console.log(err.response);
   }
 }
 
@@ -52,7 +61,7 @@ export const updateContact = async (data) => {
     })
     console.log('update response',res.data);
     return await res.data
-  }catch(e) {
-    console.log(e);
+  }catch(err) {
+    console.log(err.response);
   }
 }

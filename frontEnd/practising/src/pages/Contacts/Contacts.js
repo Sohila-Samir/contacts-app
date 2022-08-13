@@ -4,20 +4,18 @@ import Heading from "../../components/Main/Heading/Heading";
 
 import './Contacts.css'
 
-const Contacts = ({ contactsToShow, contacts, setContacts, onSetQueriedContacts }) => {
+const Contacts = ({ contacts, setContacts }) => {
   return (
     <main>
         {
-          !contactsToShow.length
+          !contacts.length
           ? <NoContacts />
           : <Heading text="Current Contacts"/>
         }
 
         <ListContacts
-          contactsToShow={contactsToShow}
           contacts={contacts}
           setContacts={setContacts}
-          onSetQueriedContacts={onSetQueriedContacts}
         />
     </main>
   );

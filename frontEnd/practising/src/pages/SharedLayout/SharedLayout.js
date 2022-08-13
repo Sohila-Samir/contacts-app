@@ -4,14 +4,11 @@ import { Outlet } from "react-router-dom";
 import NavBar from "../../components/NavBar/NavBar";
 import Footer from "../../components/Footer/Footer";
 
-const SharedLayout = ({ query, contacts, onSetQueriedContacts, onSetQuery }) => {
+const SharedLayout = ({ contacts }) => {
   return (
     <Fragment>
       <NavBar
-        query={query}
         contacts={contacts}
-        onSetQueriedContacts={onSetQueriedContacts}
-        onSetQuery={onSetQuery}
       />
       <Outlet/>
 

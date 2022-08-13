@@ -49,6 +49,17 @@ export class Contact {
 		}
 	}
 
+	async getSingleContact(id: string): Promise<contactType | undefined | null> {
+		try {
+			const contact: contactType | null = await ContactsModel.findById(id);
+			return contact;
+		} catch (err: unknown) {
+			err instanceof Error
+				? new ExpressError(err.message, undefined, err.name)
+				: '';
+		}
+	}
+
 	async delete(id: string): Promise<contactType | undefined | null> {
 		try {
 			const deletedRecord: contactType | null =

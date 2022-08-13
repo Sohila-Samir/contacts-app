@@ -5,7 +5,7 @@ import eyeIcon from './assets/eye.png'
 
 import './Contact.css'
 
-const Contact = ({ contact, contacts, onSetQueriedContacts, setContacts }) => {
+const Contact = ({ contact, contacts, setContacts }) => {
   const api = "http://localhost:2022";
   const showContactImg = contact.imgURL ? api + contact.imgURL : defaultImg
 
@@ -57,7 +57,6 @@ const Contact = ({ contact, contacts, onSetQueriedContacts, setContacts }) => {
         contactID={contact._id}
         contacts={contacts}
         setContacts={setContacts}
-        onSetQueriedContacts={onSetQueriedContacts}
       />
     </li>
   );

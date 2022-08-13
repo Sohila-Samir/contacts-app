@@ -1,5 +1,5 @@
 import Heading from '../../../components/Main/Heading/Heading';
-import Button from '../../../components/Main/Button/Button';
+import CustomLink from '../../../components/Main/CustomLink/CustomLink';
 
 import notFound404 from './404.svg'
 import './NotFound.css';
@@ -10,7 +10,13 @@ const NotFound = () => {
       <div className='not-found-info-container'>
         <Heading text="Couldn't Find What You're Looking For" />
 
-        <Button isLink={true} URL="/" text="Back to Home Page" />
+        <CustomLink
+          custom={true}
+          URL="/"
+          text="Back to Home Page"
+          isSecondary={false}
+          className="not-found-back-home-link"
+        />
       </div>
 
       <div className="not-found-img-container">

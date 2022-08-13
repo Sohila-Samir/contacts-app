@@ -12,11 +12,10 @@ const AddContact = lazy(() => import ("./../components/AddContact/AddContact"))
 const UpdateContact = lazy(() => import ("./../components/UpdateContact/UpdateContact"))
 const Contacts = lazy(() => import ("../pages/Contacts/Contacts"))
 const SharedLayout = lazy(() => import ("../pages/SharedLayout/SharedLayout"))
+const ContactDetails = lazy(() => import ("./../components/ContactDetails/ContactDetails"))
 
 function App() {
   const [contacts , setContacts] = useState([])
-  const [queriedContacts, setQueriedContacts] = useState([])
-	const [query, setQuery] = useState('')
 
   useEffect(() => {
 		const requestAllContacts = async () => {
@@ -28,19 +27,6 @@ function App() {
 		requestAllContacts()
 	}, [])
 
-  const onSetQueriedContacts = (newQueriedContacts) => {
-    setQueriedContacts(newQueriedContacts)
-  }
-
-  const onSetQuery = (newQuery) => {
-    setQuery(newQuery)
-  }
-
-  const contactsToShow =
-  query && queriedContacts.length ? queriedContacts :
-  query && !queriedContacts.length ? [] :
-  contacts
-
   return (
     <Suspense fallback={<LoadingPage />}>
       <div className="App">
@@ -50,10 +36,7 @@ function App() {
             path='/'
             element={
               <SharedLayout
-                query={query}
                 contacts={contacts}
-                onSetQueriedContacts={onSetQueriedContacts}
-                onSetQuery={onSetQuery}
               />
             }
           >
@@ -66,8 +49,6 @@ function App() {
                 <Contacts
                   contacts={contacts}
                   setContacts={setContacts}
-                  contactsToShow={contactsToShow}
-                  onSetQueriedContacts={onSetQueriedContacts}
                 />
               }
             />
@@ -77,6 +58,13 @@ function App() {
               element={
                 <AddContact
                   setContacts={setContacts} contacts={contacts} />
+              }
+            />
+
+            <Route
+              path="/contacts/:id"
+              element={
+                <ContactDetails setContacts={setContacts} contacts={contacts} />
               }
             />
 

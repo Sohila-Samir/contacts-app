@@ -17,6 +17,20 @@ const getAllContacts = async (
 	}
 };
 
+const getContact = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+): Promise<void> => {
+	try {
+		const { id } = req.params;
+		const foundContact = await contact.getSingleContact(id);
+		res.status(200).json({ success: true, data: foundContact });
+	} catch (err) {
+		next(err);
+	}
+};
+
 const addContact = async (
 	req: Request,
 	res: Response,
@@ -61,4 +75,4 @@ const updateContact = async (
 	}
 };
 
-export { getAllContacts, addContact, deleteContact, updateContact };
+export { getAllContacts, addContact, deleteContact, updateContact, getContact };
