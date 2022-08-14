@@ -2,36 +2,29 @@ export {};
 
 require('dotenv').config();
 import { Request, Response, Application, NextFunction } from 'express';
+
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import multer from 'multer';
 import connect from './config/database';
+
 import contactsRoutes from './routes/contacts-routes';
-import session, { SessionOptions } from 'express-session';
-import mongoStore from 'connect-mongo';
+import userRoutes from './routes/users-routes';
+
 import ExpressError from './utils/ExpressError';
+import generateKeyValuePairs from './utils/generateKeyPairs';
+import generateRefreshKeyValuePairs from './utils/generateRefreshKeyValuePairs';
 
 // start the application
-const connection = connect();
+connect();
+
 const port: number | string = process.env.PORT || 2022;
 const app: Application = express();
 
 app.listen(port, () => {
 	console.log(`running on port: ${port}`);
 });
-
-// variables
-const sessionOptions = {
-	secret: 'thisisnotvalidsecret',
-	resave: false,
-	saveUninitialized: true,
-	httpOnly: true,
-	store: mongoStore.create({ clientPromise: connection, dbName: 'contacts' }),
-};
-
-// config session
-app.use(session(sessionOptions as unknown as SessionOptions));
 
 // multer config
 const storage = multer.memoryStorage();
@@ -46,6 +39,7 @@ app.use(express.json());
 
 // using routes
 app.use('/api/contacts', upload.single('imgURL'), contactsRoutes);
+app.use('/api/users', userRoutes);
 
 // error handlers
 app.get('*', (req: Request, res: Response) => {

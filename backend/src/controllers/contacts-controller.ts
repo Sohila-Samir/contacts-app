@@ -4,7 +4,7 @@ import ExpressError from '../utils/ExpressError';
 
 const contact = new Contact();
 
-const getAllContacts = async (
+export const getAllContacts = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
@@ -17,7 +17,7 @@ const getAllContacts = async (
 	}
 };
 
-const getContact = async (
+export const getContact = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
@@ -31,7 +31,7 @@ const getContact = async (
 	}
 };
 
-const addContact = async (
+export const addContact = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
@@ -44,7 +44,7 @@ const addContact = async (
 	}
 };
 
-const deleteContact = async (
+export const deleteContact = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
@@ -58,7 +58,7 @@ const deleteContact = async (
 	}
 };
 
-const updateContact = async (
+export const updateContact = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
@@ -74,5 +74,3 @@ const updateContact = async (
 		next(e);
 	}
 };
-
-export { getAllContacts, addContact, deleteContact, updateContact, getContact };

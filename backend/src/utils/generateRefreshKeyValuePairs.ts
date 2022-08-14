@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import fs from 'fs';
 
-const generateKeyValuePairs = (() => {
+const generateRefreshKeyValuePairs = (() => {
 	const keyPairs = crypto.generateKeyPairSync('rsa', {
 		modulusLength: 4096,
 		publicKeyEncoding: {
@@ -13,8 +13,8 @@ const generateKeyValuePairs = (() => {
 			format: 'pem',
 		},
 	});
-	fs.writeFileSync(__dirname + '/PUB_KEY.pem', keyPairs.publicKey);
-	fs.writeFileSync(__dirname + '/PRV_KEY.pem', keyPairs.privateKey);
+	fs.writeFileSync(__dirname + '/PUB_KEY_REFRESH.pem', keyPairs.publicKey);
+	fs.writeFileSync(__dirname + '/PRV_KEY_REFRESH.pem', keyPairs.privateKey);
 })();
 
-export default generateKeyValuePairs;
+export default generateRefreshKeyValuePairs;
