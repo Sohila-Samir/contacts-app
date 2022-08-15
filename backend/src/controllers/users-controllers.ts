@@ -1,20 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 
-import User, { UserType } from '../models/User';
+import User from '../models/User';
 import { UserModel } from '../models/User';
 import * as passwordUtils from './../utils/passwordUtils';
 import ExpressError from '../utils/ExpressError';
 import verifyRefreshToken from '../utils/verifyRrefreshToken';
 
-import generateUserAuthData from '../utils/generateUserAuthData';
-import mongoose from 'mongoose';
+import { UserType } from '../Types/user-types';
 
-export type PayloadType = {
-	_id: mongoose.Types.ObjectId | undefined;
-	admin: boolean;
-	email: string;
-	username: string;
-};
+import generateUserAuthData from '../utils/generateUserAuthData';
 
 const user = new User();
 

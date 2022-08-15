@@ -1,14 +1,9 @@
 import generateAccessToken from './generateAccessToken';
 import generateRefreshToken from './generateRefreshToken';
-import { PayloadType } from '../controllers/users-controllers';
-import { UserType } from '../models/User';
 import ExpressError from './ExpressError';
 
-type UserAuthData = {
-	user?: PayloadType;
-	accessToken: string;
-	refreshToken: string;
-};
+import { PayloadType, UserAuthData } from '../Types/jwt-types';
+import { UserType } from '../Types/user-types';
 
 const generateUserAuthData = (
 	user: UserType,

@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
 import fs from 'fs';
 import path from 'path';
-import { UserType } from './../models/User';
+
+import { UserType } from '../Types/user-types';
 
 const generateRefreshToken = (
 	payload: Omit<UserType, 'password' | 'salt' | 'refreshTokens'>

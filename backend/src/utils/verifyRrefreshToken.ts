@@ -1,21 +1,8 @@
-import jwt, { JsonWebTokenError } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import path from 'path';
 import fs from 'fs';
-import { UserModel } from '../models/User';
-import ExpressError from './ExpressError';
-import mongoose from 'mongoose';
-import generateAccessToken from './generateAccessToken';
-import generateRefreshToken from './generateRefreshToken';
 
-type DecodedPayloadType = {
-	_id: mongoose.Types.ObjectId;
-	admin: boolean;
-	username: string;
-	email: string;
-	iat: number;
-	aud: string;
-	iss: string;
-};
+import ExpressError from './ExpressError';
 
 const verifyRefreshToken = (refreshToken: string) => {
 	try {

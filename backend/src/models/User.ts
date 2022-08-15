@@ -1,16 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 import { hashPassword } from '../utils/passwordUtils';
 import ExpressError from '../utils/ExpressError';
-
-export type UserType = {
-	_id?: mongoose.Types.ObjectId;
-	username: string;
-	password: string;
-	salt?: string;
-	email: string;
-	admin?: boolean;
-	refreshTokens?: string[];
-};
+import { UserType } from '../Types/user-types';
 
 const UsersSchema = new Schema({
 	username: {
@@ -26,6 +17,7 @@ const UsersSchema = new Schema({
 	},
 
 	salt: {
+		required: true,
 		unique: true,
 		type: String,
 	},

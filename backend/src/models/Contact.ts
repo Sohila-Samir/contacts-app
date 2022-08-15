@@ -2,18 +2,7 @@ import mongoose from 'mongoose';
 import { Schema } from 'mongoose';
 import ExpressError from '../utils/ExpressError';
 
-export type contactType = {
-	name: string;
-	handle: string;
-	imgURL?: string;
-	phoneNumberInfo: phoneInputType;
-};
-
-type phoneInputType = {
-	internationalNumber: string;
-	nationalNumber: string;
-	countryCode: string;
-};
+import { ContactType, PhoneInputType } from '../Types/contact-types';
 
 const contactsSchema = new Schema({
 	name: {
@@ -31,72 +20,72 @@ const contactsSchema = new Schema({
 	},
 	phoneNumberInfo: {
 		required: true,
-		type: {} as phoneInputType,
+		type: {} as PhoneInputType,
 	},
 });
 
 export const ContactsModel = mongoose.model('Contact', contactsSchema);
 
 export class Contact {
-	async index(): Promise<contactType[] | undefined> {
+	async index(): Promise<ContactType[] | undefined> {
 		try {
-			const all: contactType[] = await ContactsModel.find();
+			const all: ContactType[] = await ContactsModel.find();
 			return all;
 		} catch (err: unknown) {
-			err instanceof Error
-				? new ExpressError(err.message, undefined, err.name)
-				: '';
+			if (err instanceof Error) {
+				throw new ExpressError(err.message, 400, err.name);
+			}
 		}
 	}
 
-	async getSingleContact(id: string): Promise<contactType | undefined | null> {
+	async getSingleContact(id: string): Promise<ContactType | undefined | null> {
 		try {
-			const contact: contactType | null = await ContactsModel.findById(id);
+			const contact: ContactType | null = await ContactsModel.findById(id);
 			return contact;
 		} catch (err: unknown) {
-			err instanceof Error
-				? new ExpressError(err.message, undefined, err.name)
-				: '';
+			if (err instanceof Error) {
+				throw new ExpressError(err.message, 400, err.name);
+			}
 		}
 	}
 
-	async delete(id: string): Promise<contactType | undefined | null> {
+	async delete(id: string): Promise<ContactType | undefined | null> {
 		try {
-			const deletedRecord: contactType | null =
+			const deletedRecord: ContactType | null =
 				await ContactsModel.findByIdAndDelete(id);
 			return deletedRecord;
 		} catch (err: unknown) {
-			err instanceof Error
-				? new ExpressError(err.message, undefined, err.name)
-				: '';
+			if (err instanceof Error) {
+				throw new ExpressError(err.message, 400, err.name);
+			}
 		}
 	}
 
-	async create(contact: contactType): Promise<contactType | undefined> {
+	async create(contact: ContactType): Promise<ContactType | undefined> {
 		try {
-			const newContact: contactType = await ContactsModel.create(contact);
+			const newContact: ContactType = await ContactsModel.create(contact);
 			return newContact;
 		} catch (err: unknown) {
-			err instanceof Error
-				? new ExpressError(err.message, undefined, err.name)
-				: '';
+			if (err instanceof Error) {
+				throw new ExpressError(err.message, 400, err.name);
+			}
 		}
 	}
 
 	async update(
 		contactID: string,
-		contact: contactType
-	): Promise<contactType | undefined | null> {
+		contact: ContactType
+	): Promise<ContactType | undefined | null> {
 		try {
-			const updatedContact: contactType | null =
+			const updatedContact: ContactType | null =
 				await ContactsModel.findByIdAndUpdate(contactID, contact, {
 					new: true,
 				});
 			return updatedContact;
 		} catch (err: unknown) {
-			err instanceof Error
-				? new ExpressError(err.message, undefined, err.name)
-				: '';
+			if (err instanceof Error) {
+				throw new ExpressError(err.message, 400, err.name);
+			}
 		}
 	}
 }

@@ -1,6 +1,5 @@
 import { Contact } from '../models/Contact';
 import { Request, Response, NextFunction } from 'express';
-import ExpressError from '../utils/ExpressError';
 
 const contact = new Contact();
 
@@ -53,8 +52,8 @@ export const deleteContact = async (
 		const { id } = req.params;
 		const deletedContact = await contact.delete(id);
 		res.status(200).json({ success: true, data: deletedContact });
-	} catch (e) {
-		next(e);
+	} catch (err) {
+		next(err);
 	}
 };
 
@@ -70,7 +69,7 @@ export const updateContact = async (
 			success: true,
 			data: updatedContact,
 		});
-	} catch (e) {
-		next(e);
+	} catch (err) {
+		next(err);
 	}
 };

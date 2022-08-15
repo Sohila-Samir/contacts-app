@@ -2,7 +2,6 @@ import fs from 'fs';
 import path from 'path';
 import { Request, Response, NextFunction } from 'express';
 import { ContactsModel } from '../models/Contact';
-import ExpressError from '../utils/ExpressError';
 
 const removeImage = async (
 	req: Request,
