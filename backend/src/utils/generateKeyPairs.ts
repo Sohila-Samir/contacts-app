@@ -16,5 +16,3 @@ const generateKeyValuePairs = (() => {
 	fs.writeFileSync(__dirname + '/PUB_KEY.pem', keyPairs.publicKey);
 	fs.writeFileSync(__dirname + '/PRV_KEY.pem', keyPairs.privateKey);
 })();
-
-export default generateKeyValuePairs;

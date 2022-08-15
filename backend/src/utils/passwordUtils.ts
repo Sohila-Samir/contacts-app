@@ -17,6 +17,7 @@ const verifyPassword = async (
 	salt: string
 ) => {
 	const hash = await bcrypt.hash(password, salt);
+
 	return storedPassword === hash;
 };
 

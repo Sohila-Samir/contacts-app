@@ -16,5 +16,3 @@ const generateRefreshKeyValuePairs = (() => {
 	fs.writeFileSync(__dirname + '/PUB_KEY_REFRESH.pem', keyPairs.publicKey);
 	fs.writeFileSync(__dirname + '/PRV_KEY_REFRESH.pem', keyPairs.privateKey);
 })();
-
-export default generateRefreshKeyValuePairs;

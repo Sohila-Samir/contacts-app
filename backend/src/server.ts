@@ -13,8 +13,6 @@ import contactsRoutes from './routes/contacts-routes';
 import userRoutes from './routes/users-routes';
 
 import ExpressError from './utils/ExpressError';
-import generateKeyValuePairs from './utils/generateKeyPairs';
-import generateRefreshKeyValuePairs from './utils/generateRefreshKeyValuePairs';
 
 // start the application
 connect();
@@ -53,10 +51,10 @@ app.use(
 		res: Response,
 		next: NextFunction
 	) => {
-		console.log(`ERROR WAS CAUGHT: ${err.message} | ${err.name}`);
+		console.log(`${err.message} | ${err.name}`);
 		res.json({
 			success: false,
-			message: `ERROR WAS CAUGHT: ${err.message} | ${err.name}`,
+			message: `${err.message} | ${err.name}`,
 		});
 	}
 );

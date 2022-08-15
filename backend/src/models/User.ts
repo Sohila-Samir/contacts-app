@@ -1,6 +1,6 @@
-import bcrypt from 'bcrypt';
-import mongoose, { ObjectId, Schema } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import { hashPassword } from '../utils/passwordUtils';
+import ExpressError from '../utils/ExpressError';
 
 export type UserType = {
 	_id?: mongoose.Types.ObjectId;
@@ -9,10 +9,8 @@ export type UserType = {
 	salt?: string;
 	email: string;
 	admin?: boolean;
-	refreshTokens?: string[] | [];
+	refreshTokens?: string[];
 };
-
-const saltRounds: number = Number(process.env.SALT_ROUNDS_NUM as string);
 
 const UsersSchema = new Schema({
 	username: {
@@ -30,7 +28,6 @@ const UsersSchema = new Schema({
 	salt: {
 		unique: true,
 		type: String,
-		required: true,
 	},
 
 	email: {
@@ -45,16 +42,14 @@ const UsersSchema = new Schema({
 
 	refreshTokens: {
 		type: [String],
-		default: [],
 	},
 });
 
-export const UserModel = mongoose.model('user', UsersSchema);
-
-UsersSchema.pre('save', async (next) => {
+UsersSchema.pre('save', async function (next) {
 	try {
 		const doc = this as unknown as UserType;
 		const userVerifyCredentials = await hashPassword(doc.password);
+
 		doc.salt = userVerifyCredentials.salt;
 		doc.password = userVerifyCredentials.password;
 		next();
@@ -65,6 +60,8 @@ UsersSchema.pre('save', async (next) => {
 	}
 });
 
+export const UserModel = mongoose.model('user', UsersSchema);
+
 class User {
 	async createUser(data: UserType): Promise<UserType | Error | undefined> {
 		try {
@@ -72,7 +69,7 @@ class User {
 			return user;
 		} catch (err: unknown) {
 			if (err && err instanceof Error) {
-				return err;
+				throw new ExpressError(err.message, 400, err.name);
 			}
 		}
 	}
@@ -83,7 +80,7 @@ class User {
 			return foundUser;
 		} catch (err: unknown) {
 			if (err && err instanceof Error) {
-				return err;
+				throw new ExpressError(err.message, 400, err.name);
 			}
 		}
 	}
@@ -96,7 +93,7 @@ class User {
 			return deletedUser;
 		} catch (err: unknown) {
 			if (err && err instanceof Error) {
-				return err;
+				throw new ExpressError(err.message, 400, err.name);
 			}
 		}
 	}

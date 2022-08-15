@@ -7,9 +7,15 @@ import * as userHandleFunctions from './../controllers/users-controllers';
 
 const router: IRouter = express.Router();
 
-router.get('/:id', userHandleFunctions.findUser);
+router.get('/:id/logout', verifyUser, userHandleFunctions.logout);
+
+router.get('/:id', verifyUser, userHandleFunctions.findUser);
 
 router.post('/new', userHandleFunctions.newUser);
+
+router.post('/refresh-token', userHandleFunctions.refreshToken);
+
+router.post('/login', userHandleFunctions.login);
 
 router.delete('/:id/delete', verifyUser, userHandleFunctions.deleteUser);
 
