@@ -13,7 +13,7 @@ router.get('/:id', verifyUser, userHandleFunctions.findUser);
 
 router.post('/new', userHandleFunctions.newUser);
 
-router.post('/refresh-token', userHandleFunctions.refreshToken);
+router.post('/:id/refresh-token', userHandleFunctions.refreshToken);
 
 router.post('/login', userHandleFunctions.login);
 

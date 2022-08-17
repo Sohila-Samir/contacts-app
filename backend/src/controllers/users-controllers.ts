@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 
 import User from '../models/User';
-import { UserModel } from '../models/User';
-import * as passwordUtils from './../utils/passwordUtils';
 import ExpressError from '../utils/ExpressError';
 import verifyRefreshToken from '../utils/verifyRrefreshToken';
 
 import { UserType } from '../Types/user-types';
+import { UserModel } from '../models/User';
 
 import generateUserAuthData from '../utils/generateUserAuthData';
+import mongoose from 'mongoose';
 
 const user = new User();
 
@@ -18,32 +18,20 @@ export const login = async (
 	next: NextFunction
 ) => {
 	try {
-		const { username, password, email } = req.body;
-		const foundUser: UserType = (await UserModel.findOne({
-			username: username,
-			email: email,
-		})) as UserType;
+		const { password, email } = req.body;
 
-		const isSamePassword = await passwordUtils.verifyPassword(
-			password,
-			foundUser.password,
-			foundUser.salt as string
+		const user = (await UserModel.findAndVerifyPassword(
+			email,
+			password
+		)) as UserType;
+
+		const authData = generateUserAuthData(user, true);
+
+		await UserModel.findAndUpdateRefreshToken(
+			user._id,
+			authData?.refreshToken as string,
+			{ isAdd: true }
 		);
-
-		if (!foundUser || !isSamePassword) {
-			return res.status(400).json({
-				success: false,
-				message: 'username or password is incorrect!',
-			});
-		}
-		const authData = generateUserAuthData(foundUser, true);
-
-		await UserModel.findByIdAndUpdate(foundUser._id, {
-			...foundUser,
-			refreshTokens: foundUser.refreshTokens?.push(
-				authData?.refreshToken as string
-			),
-		});
 
 		res.status(200).json({
 			success: true,
@@ -63,54 +51,27 @@ export const refreshToken = async (
 ) => {
 	try {
 		const { refreshToken } = req.body;
-		if (!refreshToken) {
-			return res.status(401).json({
-				success: false,
-				message: 'you are not authenticated, sign in first',
-			});
-		}
+		const { id } = req.params;
+
 		const payload = verifyRefreshToken(refreshToken);
-		if (!payload) {
-			return res
-				.status(403)
-				.json({ success: false, message: 'token is not valid!' });
-		}
 
-		const dbUser = (await UserModel.findById(payload._id)) as UserType;
+		console.log('paylaod controller', payload);
 
-		if (dbUser.refreshTokens?.includes(refreshToken)) {
-			const authData = generateUserAuthData(payload as UserType);
+		const authData = generateUserAuthData(
+			payload as unknown as UserType,
+			false
+		);
 
-			const filteredRefreshTokens = dbUser.refreshTokens?.filter(
-				(token) => token !== refreshToken
-			);
-			filteredRefreshTokens.push(authData?.refreshToken as string);
+		await UserModel.findAndUpdateRefreshToken(
+			id as unknown as mongoose.Types.ObjectId,
+			refreshToken,
+			{
+				isReplace: true,
+				newToken: authData?.refreshToken as string,
+			}
+		);
 
-			const updatedUser = {
-				dbUser,
-				refreshTokens: filteredRefreshTokens,
-			};
-
-			console.log('new user', updatedUser);
-
-			await UserModel.findByIdAndUpdate(payload._id, updatedUser, {
-				new: true,
-				runValidators: true,
-			});
-
-			res.status(200).json(authData);
-		} else {
-			res.status(403).json({
-				success: false,
-				message: 'invalid token, token reuse dedicated!',
-			});
-
-			await UserModel.findByIdAndUpdate(
-				dbUser._id,
-				{ refreshTokens: [] },
-				{ new: true, runValidators: true }
-			);
-		}
+		res.status(202).json({ success: true, data: authData });
 	} catch (err: unknown) {
 		if (err && err instanceof Error) {
 			next(err);
@@ -125,10 +86,10 @@ export const logout = async (
 ) => {
 	try {
 		const { id } = req.params;
-		await UserModel.findByIdAndUpdate(
-			id,
-			{ refreshTokens: [] },
-			{ new: true, runValidators: true }
+		await UserModel.findAndUpdateRefreshToken(
+			id as unknown as mongoose.Types.ObjectId,
+			undefined,
+			{ isEmpty: true }
 		);
 		res.status(200).json({ success: true, message: 'logged out successfully' });
 	} catch (err: unknown) {

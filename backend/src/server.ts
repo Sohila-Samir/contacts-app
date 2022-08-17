@@ -7,12 +7,14 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import multer from 'multer';
-import connect from './config/database';
 
 import contactsRoutes from './routes/contacts-routes';
 import userRoutes from './routes/users-routes';
 
+import connect from './config/database';
 import ExpressError from './utils/ExpressError';
+
+import errorHandler from './middlewares/error';
 
 // start the application
 connect();
@@ -44,17 +46,4 @@ app.get('*', (req: Request, res: Response) => {
 	res.status(404).json({ success: false, err: '404, Page not found.' });
 });
 
-app.use(
-	(
-		err: Error | ExpressError,
-		req: Request,
-		res: Response,
-		next: NextFunction
-	) => {
-		console.log(`${err.message} | ${err.name}`);
-		res.json({
-			success: false,
-			message: `${err.message} | ${err.name}`,
-		});
-	}
-);
+app.use(errorHandler);

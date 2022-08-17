@@ -1,14 +1,7 @@
-import mongoose from 'mongoose';
-
-export type PayloadType = {
-	_id: mongoose.Types.ObjectId | undefined;
-	admin: boolean;
-	email: string;
-	username: string;
-};
+import { UserType } from './user-types';
 
 export type UserAuthData = {
-	user?: PayloadType;
+	user?: Omit<UserType, 'password' | 'salt' | 'refreshTokens'>;
 	accessToken: string;
 	refreshToken: string;
 };
