@@ -7,7 +7,7 @@ import './Contact.css'
 
 const Contact = ({ contact, contacts, setContacts }) => {
   const api = "http://localhost:2022";
-  const showContactImg = contact.imgURL ? api + contact.imgURL : defaultImg
+  const showContactImg = contact.contactAvatar ? api + contact.contactAvatar : defaultImg
 
   return (
     <li className="contact">

@@ -22,7 +22,7 @@ const ContactForm = ({ setContacts, contacts, formActionHandler, formHeadingText
       return {
         name: "",
         handle: "",
-        imgURL: "",
+        contactAvatar: "",
         phoneNumberInfo: {
           internationalNumber: "",
           nationalNumber: "",

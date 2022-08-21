@@ -1,7 +1,7 @@
-import { UserType } from './user-types';
+import { UserType } from "./user-types";
 
 export type UserAuthData = {
-	user?: Omit<UserType, 'password' | 'salt' | 'refreshTokens'>;
+	user?: Omit<UserType, "password" | "salt" | "refreshTokens">;
 	accessToken: string;
 	refreshToken: string;
 };

@@ -1,11 +1,7 @@
-import { Model } from 'mongoose';
-import { UserModel } from './../models/User';
-import mongoose from 'mongoose';
+import { Model } from "mongoose";
+import mongoose from "mongoose";
 
 export type UserType = {
-	birthday?: Date;
-	phoneNumber?: number;
-	imgURL?: string;
 	_id: mongoose.Types.ObjectId;
 	refreshTokens: string[];
 	name: string;
@@ -14,6 +10,9 @@ export type UserType = {
 	salt: string;
 	email: string;
 	admin: boolean;
+	birthday?: Date;
+	phoneNumber?: number;
+	userAvatar?: string;
 };
 
 export type refreshTokenQueryOptions = {
@@ -23,11 +22,10 @@ export type refreshTokenQueryOptions = {
 	isEmpty?: boolean;
 	newToken?: string;
 };
-interface UserModelI extends Model<typeof UserModel> {
-	findAndVerifyPassword(
-		email: string,
-		password: string
-	): Promise<UserType | undefined>;
+
+interface UserModelI extends Model<UserType> {
+	findAndVerifyPassword(email: string, password: string): Promise<UserType | undefined>;
+
 	findAndUpdateRefreshToken(
 		id: mongoose.Types.ObjectId,
 		refreshToken: string | undefined,

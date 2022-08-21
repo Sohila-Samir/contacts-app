@@ -18,8 +18,8 @@ const ImageInput = ({ onHandleDataToUseChange, dataToUse, setDataToUse }) => {
     })
   }
 
-  const imageToShow = typeof dataToUse?.imgURL === 'string'
-  ? `http://localhost:2022${dataToUse?.imgURL}`
+  const imageToShow = typeof dataToUse?.contactAvatar === 'string'
+  ? `http://localhost:2022${dataToUse?.contactAvatar}`
   : imageURL
 
   const handleImgChange = (e) => {
@@ -33,14 +33,14 @@ const ImageInput = ({ onHandleDataToUseChange, dataToUse, setDataToUse }) => {
   }
 
   const handleClearImg = (e) => {
-    setDataToUse(prevState => ({...prevState, imgURL: ''}))
+    setDataToUse(prevState => ({...prevState, contactAvatar: ''}))
     setImageURL('')
   }
 
   return (
     <div className="contact-form-avatar-container">
       <div className="contact-form-avatar">
-        {!imageURL && !dataToUse?.imgURL
+        {!imageURL && !dataToUse?.contactAvatar
           ? <span
               role={"img"}
               className="contact-form-avatar-preview"
@@ -58,7 +58,7 @@ const ImageInput = ({ onHandleDataToUseChange, dataToUse, setDataToUse }) => {
           ref={imageInput}
           className="contact-form-avatar-input"
           type="file"
-          name="imgURL"
+          name="contactAvatar"
           accept=".png, .jpeg, .jpg"
           onChange={handleImgChange}
         />

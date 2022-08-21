@@ -1,5 +1,3 @@
-import mongoose from 'mongoose';
-
 export type PhoneInputType = {
 	internationalNumber: string;
 	nationalNumber: string;
@@ -9,6 +7,8 @@ export type PhoneInputType = {
 export type ContactType = {
 	name: string;
 	handle: string;
-	imgURL?: string;
 	phoneNumberInfo: PhoneInputType;
+	contactAvatar?: string;
+	email?: string;
+	category?: "family" | "friends" | "co-workers" | "relatives" | null;
 };

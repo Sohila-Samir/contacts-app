@@ -1,7 +1,7 @@
 export {};
 
 require('dotenv').config();
-import { Request, Response, Application, NextFunction } from 'express';
+import { Request, Response, Application } from 'express';
 
 import express from 'express';
 import cors from 'cors';
@@ -10,9 +10,9 @@ import multer from 'multer';
 
 import contactsRoutes from './routes/contacts-routes';
 import userRoutes from './routes/users-routes';
+import authRoutes from './routes/auth-routes';
 
 import connect from './config/database';
-import ExpressError from './utils/ExpressError';
 
 import errorHandler from './middlewares/error';
 
@@ -38,8 +38,9 @@ app.use(cors());
 app.use(express.json());
 
 // using routes
-app.use('/api/contacts', upload.single('imgURL'), contactsRoutes);
+app.use('/api/contacts', upload.single('contactAvatar'), contactsRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/auth', authRoutes);
 
 // error handlers
 app.get('*', (req: Request, res: Response) => {

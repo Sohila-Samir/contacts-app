@@ -1,5 +1,5 @@
-import { Contact } from '../models/Contact';
-import { Request, Response, NextFunction } from 'express';
+import { Contact } from "../models/Contact";
+import { Request, Response, NextFunction } from "express";
 
 const contact = new Contact();
 

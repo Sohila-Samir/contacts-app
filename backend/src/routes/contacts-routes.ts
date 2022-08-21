@@ -1,28 +1,19 @@
-import { IRouter } from 'express';
-import express from 'express';
-import * as contactsControllers from './../controllers/contacts-controller';
-import handleImage from '../middlewares/handle-images';
-import removeContactAvatarImg from '../middlewares/remove-images';
+import { IRouter } from "express";
+import express from "express";
+import * as contactsControllers from "./../controllers/contacts-controller";
+import handleImage from "../middlewares/handle-images";
+import removeContactAvatarImg from "../middlewares/remove-contact-image";
 
 const router: IRouter = express.Router();
 
-router.get('/', contactsControllers.getAllContacts);
+router.get("/", contactsControllers.getAllContacts);
 
-router.get('/:id', contactsControllers.getContact);
+router.get("/:id", contactsControllers.getContact);
 
-router.post('/new', handleImage, contactsControllers.addContact);
+router.post("/new", handleImage, contactsControllers.addContact);
 
-router.put(
-	'/:id/update',
-	removeContactAvatarImg,
-	handleImage,
-	contactsControllers.updateContact
-);
+router.put("/:id/update", removeContactAvatarImg, handleImage, contactsControllers.updateContact);
 
-router.delete(
-	'/:id/delete',
-	removeContactAvatarImg,
-	contactsControllers.deleteContact
-);
+router.delete("/:id/delete", removeContactAvatarImg, contactsControllers.deleteContact);
 
 export default router;

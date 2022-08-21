@@ -1,16 +1,15 @@
-import generateAccessToken from './generateAccessToken';
-import generateRefreshToken from './generateRefreshToken';
-import ExpressError from './ExpressError';
+import { generateAccessToken, generateRefreshToken } from "./jwtUtils";
+import ExpressError from "./ExpressError";
 
-import { UserAuthData } from '../Types/jwt-types';
-import { UserType } from '../Types/user-types';
+import { UserAuthData } from "../Types/jwt-types";
+import { UserType } from "../Types/user-types";
 
 const generateUserAuthData = (
 	user: UserType,
 	isUser: boolean = false
 ): UserAuthData | undefined => {
 	try {
-		const payload: Omit<UserType, 'password' | 'salt' | 'refreshTokens'> = {
+		const payload: Omit<UserType, "password" | "salt" | "refreshTokens"> = {
 			_id: user._id,
 			name: user.name,
 			username: user.username,
@@ -18,7 +17,7 @@ const generateUserAuthData = (
 			admin: user.admin,
 			birthday: user.birthday,
 			phoneNumber: user.phoneNumber,
-			imgURL: user.imgURL,
+			userAvatar: user.userAvatar,
 		};
 
 		const accessToken = generateAccessToken(payload) as string;
