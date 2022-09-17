@@ -1,3 +1,5 @@
 node_modules
 .env
 dist
+src/config/roles.ts
+src/config/email-transporter.ts

@@ -1,15 +1,12 @@
-import { createContext, useState } from "react";
+import { createContext, useReducer } from "react";
+import { INITIAL_STATE, userReducer } from "../Reducers/userReducer";
 
-const userContext = createContext({});
+const UserContext = createContext();
 
-export const userContextProvider = ({ children }) => {
-	const [user, setUser] = useState();
+export const UserProvider = ({ children }) => {
+	const [state, dispatch] = useReducer(userReducer, INITIAL_STATE);
 
-	const updateUser = newUser => {
-		return setUser(prevState => ({ ...prevState, ...newUser }));
-	};
-
-	<userContext.Provider value={{ user, updateUser }}>{children}</userContext.Provider>;
+	return <UserContext.Provider value={{ user: state, dispatch }}>{children}</UserContext.Provider>;
 };
 
-export default userContext;
+export default UserContext;

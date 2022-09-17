@@ -3,6 +3,7 @@ export const INITIAL_STATE = {
 	handle: "",
 	category: "",
 	email: "",
+	address: "",
 	contactAvatar: "",
 	phoneNumberInfo: {
 		internationalNumber: "",
@@ -13,17 +14,21 @@ export const INITIAL_STATE = {
 
 export const formReducer = (state, action) => {
 	switch (action.type) {
-		case CHANGE_SINGLE_INPUT:
+		case "CHANGE_SINGLE_INPUT":
 			return { ...state, [action.payload.name]: action.payload.value };
-		case CHANGE_PHONE_NUMBER:
+		case "CHANGE_PHONE_NUMBER":
 			return {
 				...state,
-				phoneNumberInfo: { ...state.phoneNumberInfo, [action.payload.name]: action.payload.value },
+				phoneNumberInfo: { ...state.phoneNumberInfo, ...action.payload },
 			};
-		case GET_CURRENT_STATE:
+		case "GET_CURRENT_STATE":
 			return state;
-		case UPDATE_CURRENT_STATE:
+		case "GET_INITIAL_STATE":
+			return INITIAL_STATE;
+		case "UPDATE_CURRENT_STATE":
 			return { ...state, ...action.payload };
+		case "RESET":
+			return { ...state, ...INITIAL_STATE };
 		default:
 			return state;
 	}

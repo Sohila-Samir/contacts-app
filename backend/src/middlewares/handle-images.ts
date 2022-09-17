@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
 import { NextFunction, Request, Response } from "express";
-import ExpressError from "../utils/ExpressError";
-import resizeImg from "../utils/resizeImage";
+import ExpressError from "../utils/main/ExpressError";
+import resizeImg from "../utils/images/resizeImage";
 import { SharpOptions } from "../Types/sharp-types";
 
 const handleImage = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -34,9 +34,10 @@ const handleImage = async (req: Request, res: Response, next: NextFunction): Pro
 			next();
 		});
 	} catch (err: unknown) {
-		err && err instanceof (ExpressError || Error)
-			? next(new ExpressError(err.message, err.status, err.name))
-			: "";
+		if (err && err instanceof (ExpressError || Error)) {
+			console.log("error caught", err.message);
+			next(err);
+		}
 	}
 };
 export default handleImage;

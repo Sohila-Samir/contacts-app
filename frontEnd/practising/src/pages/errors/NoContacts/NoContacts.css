@@ -4,6 +4,7 @@
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
+	row-gap: 3rem;
 }
 
 .no-contacts-img-container {
@@ -13,7 +14,7 @@
 }
 
 .no-contacts-img {
-	width: 80%;
+	width: 100%;
 }
 
 @media screen and (min-width: 1024px) {

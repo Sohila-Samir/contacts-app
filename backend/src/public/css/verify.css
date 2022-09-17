@@ -1,0 +1,32 @@
+body {
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	background-color: #e0f7fa;
+	font-family: cursive, serif;
+	margin-inline: 3rem;
+}
+
+h1 {
+	color: #0f1b25;
+	letter-spacing: 2px;
+}
+
+.verified-info-container {
+	width: 100%;
+	max-width: 550px;
+	background-color: white;
+	padding: 1.5rem;
+	color: #0f1b25;
+	border-radius: 15px;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	-ms-border-radius: 15px;
+	-o-border-radius: 15px;
+}
+
+.verified-info-container p {
+	font-size: 1.2rem;
+}

@@ -1,27 +1,45 @@
 .contact {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	align-items: stretch;
-	padding: 1.2rem;
-	padding-bottom: 2rem;
-	box-shadow: 0 0px 15px 0 #333333;
-	border-radius: 10px;
-	background-color: #5852f2;
+	box-shadow: 0 0px 15px 0 silver;
+	border-radius: 20px;
+	background-color: #e0f7fa;
+	overflow: hidden;
 }
 
-.contact-info-container {
+.contact-header {
 	display: flex;
-	justify-content: space-around;
+	justify-content: space-between;
 	align-items: flex-start;
-	gap: 1.5rem;
-	margin-bottom: 4rem;
-	padding-top: 1rem;
+	background-color: #0f1b25;
+	padding: 1.3rem;
+	padding-block-end: 3rem;
+	border-radius: 20px 20px 0 0;
+	-webkit-border-radius: 20px 20px 0 0;
+	-moz-border-radius: 20px 20px 0 0;
+	-ms-border-radius: 20px 20px 0 0;
+	-o-border-radius: 20px 20px 0 0;
+}
+
+.contact-header a.Link.update-link {
+	width: 25px;
+	aspect-ratio: 1/1;
+	background-image: url("./assets/edit-contact-icon.png");
+	background-size: cover;
+	background-repeat: no-repeat;
+	position: relative;
+	top: 0;
+	right: 0;
+	padding: 0.4rem;
 }
 
 .contact-avatar-container {
 	width: 85px;
 	cursor: pointer;
+	position: absolute;
+	left: calc(50% - 45px);
+	top: 50%;
 }
 
 .show-image-wrapper {
@@ -42,11 +60,10 @@
 	-moz-transition: all 0.3s ease-in-out;
 	-ms-transition: all 0.3s ease-in-out;
 	-o-transition: all 0.3s ease-in-out;
-}
-
-.contact-avatar-container:hover > .show-image-wrapper {
-	opacity: 1;
-	height: 100%;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	-ms-border-radius: 50%;
+	-o-border-radius: 50%;
 }
 
 .show-image-wrapper .eye-icon {
@@ -65,86 +82,40 @@
 	-o-border-radius: 50%;
 }
 
-.contact-about-container {
+.contact-info-container {
 	display: flex;
 	flex-direction: column;
-	align-items: flex-start;
-	gap: 0.3rem;
+	justify-content: center;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 2rem;
+	padding-block-start: 3.5rem;
+	white-space: nowrap;
 }
 
-.contact-about-container span {
-	font-size: 1rem;
-	color: #f9f7ff;
-}
-
-.contact-country-code {
-	font-weight: 600;
-}
-
-.contact-name {
+.contact-info-container span {
 	font-size: 1.1rem;
 	font-weight: 600;
 }
 
-.contact-item-btns-container {
-	display: flex;
-	align-self: stretch;
-	justify-content: space-around;
-	align-items: center;
-}
-
-.delete-contact-btn {
-	width: 40px;
-	height: 40px;
-	background-image: url('./assets/close.svg');
+.delete-contact-contacts-page {
+	width: 30px;
+	aspect-ratio: 1/1;
+	background-image: url("./assets/delete-contact-icon.png");
 	background-size: cover;
 	background-repeat: no-repeat;
-	background-color: #0d0d0d;
-	filter: brightness(2.5);
-	position: absolute;
-	z-index: 5;
-	top: -20px;
-	right: -20px;
-	border-radius: 50%;
-	transition: all 0.2s ease-in-out;
-	-webkit-transition: all 0.2s ease-in-out;
-	-moz-transition: all 0.2s ease-in-out;
-	-ms-transition: all 0.2s ease-in-out;
-	-o-transition: all 0.2s ease-in-out;
+	padding: 0.4rem;
 }
 
-.call-contact {
-	background-image: url('./assets/call-icon.png');
-	width: 45px;
-	height: 45px;
-	background-size: cover;
-	background-repeat: no-repeat;
-	transform: rotate(360deg);
-	transition: all 0.4s ease-in-out;
-	-webkit-transition: all 0.4s ease-in-out;
-	-moz-transition: all 0.4s ease-in-out;
-	-ms-transition: all 0.4s ease-in-out;
-	-o-transition: all 0.4s ease-in-out;
-	-webkit-transform: rotate(360deg);
-	-moz-transform: rotate(360deg);
-	-ms-transform: rotate(360deg);
-	-o-transform: rotate(360deg);
+a.secondary.Link.contact-more-details-btn {
+	width: fit-content;
+	margin-inline: auto;
+	margin-block-end: 2rem;
 }
 
 @media (hover: hover) {
-	.delete-contact-btn:hover {
-		transform: rotate(360deg);
-		-webkit-transform: rotate(360deg);
-		-moz-transform: rotate(360deg);
-		-ms-transform: rotate(360deg);
-		-o-transform: rotate(360deg);
-	}
-
-	.call-contact:hover {
-		transform: scale(1.3) rotate(290deg);
-		-webkit-transform: scale(1.3) rotate(290deg);
-		-moz-transform: scale(1.3) rotate(290deg);
-		-ms-transform: scale(1.3) rotate(290deg);
-		-o-transform: scale(1.3) rotate(290deg);
+	.contact-avatar-container:hover > .show-image-wrapper {
+		opacity: 1;
+		height: 100%;
 	}
 }

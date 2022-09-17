@@ -1,0 +1,101 @@
+.register-form-section {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #0f1b25;
+	height: 100vh;
+	padding: 5rem;
+}
+
+.register-form-container {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	max-width: 650px;
+	height: fit-content;
+}
+
+.register-header-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #e0f7fa;
+	width: 100%;
+	border-radius: 20px 0 0 20px;
+}
+
+.register-header-container h2 {
+	font-size: 2rem;
+	letter-spacing: 3px;
+}
+
+form.register-form {
+	padding: 2rem 1.5rem;
+	max-width: 400px;
+	background-color: #ffffff;
+	border-radius: 0 20px 20px 0;
+	width: 85%;
+	height: 100%;
+}
+
+form.register-form h2 {
+	color: #0f1b25;
+	font-weight: 600;
+	letter-spacing: 3px;
+	font-size: 2rem;
+	margin-block-end: 2.5rem;
+}
+
+.register-form h3 {
+	text-align: left;
+	text-transform: uppercase;
+	margin-block-end: 1rem;
+	letter-spacing: 2px;
+}
+
+.optional-header-container {
+	cursor: pointer;
+	display: flex;
+	align-items: flex-start;
+	gap: 1rem;
+}
+
+.optional-register-fields {
+	height: 0;
+	overflow: hidden;
+	transition: 0.2s all ease;
+}
+
+span.optional-menu-icon {
+	background-image: url("./assets/expand-icon.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+	width: 20px;
+	height: 20px;
+	transition: 0.2s all ease;
+}
+
+.toggle-optional-menu-icon {
+	transform: rotate(180deg);
+	-webkit-transform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+}
+
+.optional-register-fields.toggle-optional-menu {
+	height: 200px;
+}
+
+.register-btn {
+	width: 100%;
+	margin-block-start: 0.5rem;
+}
+
+a.Link.login-link {
+	padding: 0;
+	margin-block-start: 2rem;
+	display: inline-block;
+	font-size: 0.9rem;
+	color: gray;
+}

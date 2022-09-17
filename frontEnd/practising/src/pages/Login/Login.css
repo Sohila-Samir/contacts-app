@@ -1,0 +1,64 @@
+.login-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	padding: 2rem;
+	background-color: #0f1b25;
+}
+
+form.login-form {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	width: 100%;
+	background-color: #e0f7fa;
+	max-width: 390px;
+	height: fit-content;
+	padding: 4rem 2.3rem;
+	border-radius: 20px;
+	-webkit-border-radius: 20px;
+	-moz-border-radius: 20px;
+	-ms-border-radius: 20px;
+	-o-border-radius: 20px;
+}
+
+form.login-form h2 {
+	color: #0f1b25;
+	font-weight: 600;
+	letter-spacing: 3px;
+	font-size: 2rem;
+	margin-block-end: 2.5rem;
+}
+
+form.login-form .form-input-field label {
+	color: #0f1b25;
+}
+
+.login-container .toggle-password-visibility {
+	top: calc(50% - 12px);
+}
+
+button.main.btn.submit-login-form {
+	margin-block-start: 1.5rem;
+}
+
+a.Link.register-link {
+	margin-block-start: 1rem;
+}
+
+.trustDevice-container {
+	text-align: start;
+	font-size: 1.1rem;
+}
+
+input#trustDevice {
+	accent-color: #0e192b;
+	margin-inline-end: 0.5rem;
+}
+
+@media screen and (min-width: 768px) {
+	.cross-img-container {
+		display: block;
+	}
+}

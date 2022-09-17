@@ -1,6 +1,12 @@
 import mongoose from "mongoose";
 
-const connectionString: string = process.env.CONNECTION_STRING as string;
+let connectionString: string;
+
+if (process.env.NODE_ENV !== "production") {
+	connectionString = process.env.TEST_DB_CONNECTION_STRING as string;
+} else {
+	connectionString = process.env.DB_CONNECTION_STRING as string;
+}
 
 const connect = async () => {
 	const connect = await mongoose.connect(connectionString);

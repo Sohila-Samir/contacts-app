@@ -6,9 +6,9 @@ import verifyUser from "../middlewares/verifyUser";
 
 const router: IRouter = express.Router();
 
-router.get("/:id/logout", verifyUser, authHandleFunctions.logout);
+router.post("/logout", verifyUser, authHandleFunctions.logout);
 
-router.post("/:id/refresh-token", authHandleFunctions.refreshToken);
+router.post("/refresh-token", authHandleFunctions.refreshToken);
 
 router.post("/login", authHandleFunctions.login);
 

@@ -1,5 +1,5 @@
 .Link {
-	padding: 0.4rem 0.8rem;
+	padding: 0.7rem 2rem;
 	text-decoration: none;
 	font-size: 1rem;
 	color: var(--main-text-color);
@@ -7,34 +7,30 @@
 	cursor: pointer;
 	outline: none;
 	border: 1px solid transparent;
-	border-radius: 15px;
+	border-radius: 20px;
 	transition: all 0.2s ease;
 }
 
 .main {
 	font-weight: 600;
-	color: #0d0d0d;
-	background-color: #ebedf2;
-}
-
-.main:hover {
-	background-color: #ebedf2;
+	color: #ffffff;
+	background-color: #0f1b25;
 }
 
 .secondary {
 	background-color: transparent;
-	border-color: #ebedf2;
-	color: #ebedf2;
+	border-color: #0f1b25;
+	color: #0f1b25;
 }
 
 @media (hover: hover) {
 	.main:hover {
 		background-color: transparent;
-		border-color: #ebedf2;
-		color: #ebedf2;
+		border-color: #0f1b25;
+		color: #0f1b25;
 	}
 	.secondary:hover {
-		background-color: #ebedf2;
-		color: #0d0d0d;
+		background-color: #0f1b25;
+		color: #ffffff;
 	}
 }

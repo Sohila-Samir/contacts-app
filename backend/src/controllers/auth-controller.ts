@@ -4,25 +4,46 @@ import { UserType } from "../Types/user-types";
 import { UserModel } from "../models/User";
 import mongoose from "mongoose";
 
-import generateUserAuthData from "../utils/generateUserAuthData";
-import verifyRefreshToken from "../utils/verifyRefreshToken";
+import generateUserAuthData from "../utils/auth/generateUserAuthData";
+import verifyRefreshToken from "../utils/jwt/verifyRefreshToken";
+import ExpressError from "../utils/main/ExpressError";
+import { JwtPayload } from "../Types/jwt-types";
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const { password, email } = req.body;
+		const { password, confirmPassword, email } = req.body;
 
-		const user = (await UserModel.findAndVerifyPassword(email, password)) as UserType;
+		if (confirmPassword === password) {
+			const user = (await UserModel.findAndVerifyPassword(email, password)) as UserType;
 
-		const authData = generateUserAuthData(user, true);
+			const authData = generateUserAuthData(user);
 
-		await UserModel.findAndUpdateRefreshToken(user._id, authData?.refreshToken as string, {
-			isAdd: true,
-		});
+			await UserModel.findAndUpdateRefreshTokens(
+				user._id,
+				{
+					isAdd: true,
+				},
+				authData?.refreshToken
+			);
 
-		res.status(200).json({
-			success: true,
-			data: authData,
-		});
+			res.cookie("rtn", `${authData?.refreshToken}`, {
+				httpOnly: true,
+				domain: "localhost",
+				sameSite: "strict",
+			});
+
+			res.status(200).json({
+				success: true,
+				data: {
+					user: user._id,
+					roles: user.roles,
+					accessToken: authData?.accessToken,
+					verified: user?.verified,
+				},
+			});
+		} else {
+			throw new ExpressError("password and confirm password should match!", 400);
+		}
 	} catch (err: unknown) {
 		next(err);
 	}
@@ -30,34 +51,52 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 
 export const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const { refreshToken } = req.body;
-		const { id } = req.params;
+		const { rtn: refreshToken } = req.cookies;
 
-		const payload = verifyRefreshToken(refreshToken);
+		const payload = verifyRefreshToken(refreshToken) as JwtPayload;
 
-		const authData = generateUserAuthData(payload as unknown as UserType, false);
+		const authData = generateUserAuthData(payload as unknown as UserType);
 
-		await UserModel.findAndUpdateRefreshToken(
-			id as unknown as mongoose.Types.ObjectId,
-			refreshToken,
+		await UserModel.findAndUpdateRefreshTokens(
+			payload?._id as unknown as mongoose.Types.ObjectId,
 			{
 				isReplace: true,
-				newToken: authData?.refreshToken as string,
-			}
+				newRefreshToken: authData?.refreshToken,
+			},
+			refreshToken
 		);
 
-		res.status(202).json({ success: true, data: authData });
+		res.cookie("rtn", `${authData?.refreshToken}`, {
+			httpOnly: true,
+			domain: "localhost",
+			sameSite: "strict",
+		});
+
+		res.status(202).json({
+			success: true,
+			data: {
+				user: payload?._id,
+				roles: payload?.roles,
+				accessToken: authData?.accessToken,
+				verified: payload?.verified,
+			},
+		});
 	} catch (err: unknown) {
-		next(err);
+		if (err && err instanceof (ExpressError || Error)) {
+			err.status === 403 && res.clearCookie("rtn");
+			next(err);
+		}
 	}
 };
 
 export const logout = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const { id } = req.params;
+		const { _id } = res.locals.user;
 
-		await UserModel.findAndUpdateRefreshToken(id as unknown as mongoose.Types.ObjectId, undefined, {
-			isEmpty: true,
+		res.clearCookie("rtn");
+
+		await UserModel.findAndUpdateRefreshTokens(_id as unknown as mongoose.Types.ObjectId, {
+			isReset: true,
 		});
 
 		res.status(200).json({ success: true, message: "logged out successfully" });

@@ -2,15 +2,34 @@ import fs from "fs";
 import path from "path";
 import { Request, Response, NextFunction } from "express";
 import { ContactsModel } from "../models/Contact";
-import ExpressError from "../utils/ExpressError";
+import ExpressError from "../utils/main/ExpressError";
+import { ContactType } from "../Types/contact-types";
 
-const removeImage = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+/*
+	CASES TO REMOVE IMAGE
+	- updating contact with a previous image and new image - RUN
+	- updating contact with a previous image and cleared image from client side - RUN
+	+ removing contact with no contact image - RUN
+
+	CASES TO NOT REMOVE IMAGE
+	- updating contact with no previous image and no image provided from client side - DON'T RUN
+	- updating contact with no previous image and new image - DON'T RUN
+	- updating contact with previous image and no new image - DON'T RUN
+	+ removing contact with contact image - DON'T RUN
+*/
+const removeContactImg = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
 	try {
 		const { id } = req.params;
-		const contact = await ContactsModel.findById(id);
+		const contact: ContactType | null = await ContactsModel.findById(id);
+		const isRequestBodyEmpty: number = Object.values(req.body).length;
 		if (
-			!(req.body && !req.file && contact && !contact.contactAvatar) ||
-			!(!req.body && contact && !contact.contactAvatar)
+			(isRequestBodyEmpty && req.file && contact && contact.contactAvatar) ||
+			(!isRequestBodyEmpty && contact && contact.contactAvatar) ||
+			(isRequestBodyEmpty &&
+				!req.body.contactAvatar &&
+				!req.file &&
+				contact &&
+				contact.contactAvatar)
 		) {
 			const contactAvatarImgPath: string = path.join(
 				__dirname,
@@ -20,15 +39,18 @@ const removeImage = async (req: Request, res: Response, next: NextFunction): Pro
 			);
 
 			fs.unlink(contactAvatarImgPath, (err: unknown) => {
-				if (err && err instanceof Error) throw new ExpressError(err.message, 400, err.name);
+				if (err && err instanceof Error) console.log("removing contact image error");
 				next();
 			});
 		} else {
 			next();
 		}
 	} catch (err: unknown) {
-		err && err instanceof (ExpressError || Error) ? next(err) : "";
+		if (err && err instanceof (ExpressError || Error)) {
+			console.log("error caught", err.message);
+			next(err);
+		}
 	}
 };
 
-export default removeImage;
+export default removeContactImg;

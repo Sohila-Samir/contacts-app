@@ -1,14 +1,14 @@
 footer {
 	bottom: 0;
 	left: 0;
-	background-color: #0d0d0d;
-	color: #ebedf2;
+	background-color: #0f1b25;
+	color: #ffffff;
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
 	padding: 3rem;
 	width: 100%;
 	margin-top: 3rem;
-	gap: 1.5rem;
+	gap: 2.5rem;
 }
 
 .main-about-container {
@@ -16,19 +16,21 @@ footer {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	gap: 1.5rem;
+	gap: 2.5rem;
 }
 
 .about-container {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	gap: 2rem;
+	gap: 1.5rem;
 }
 
 p.footer-about-brief {
-	width: 240px;
-	color: #aaa5a5;
+	width: 100%;
+	max-width: 180px;
+	color: #d8d8d8;
+	line-height: 1.5rem;
 }
 
 .footer-media-links-container {
@@ -44,25 +46,25 @@ p.footer-about-brief {
 	aspect-ratio: 1 / 1;
 	background-size: cover;
 	background-repeat: no-repeat;
+	padding: 0.6rem;
 }
 
 .footer-facebook-link {
-	background-image: url('./assets/facebook.png');
+	background-image: url("./assets/facebook.png");
 }
 
 .footer-twitter-link {
-	background-image: url('./assets/twitter.png');
+	background-image: url("./assets/twitter.png");
 }
 
 .footer-linkedin-link {
-	background-image: url('./assets/linkedin.png');
+	background-image: url("./assets/linkedin.png");
 }
 
 .links-container {
 	display: grid;
 	grid-template-columns: repeat(3, 70px);
 	justify-content: center;
-	padding: 0.5rem;
 }
 
 .links-container a {
@@ -73,7 +75,7 @@ p.footer-about-brief {
 }
 
 .links-container a:hover {
-	color: aquamarine;
+	color: #e0f7fa;
 }
 
 .contact-us-container {
@@ -125,7 +127,6 @@ p.footer-about-brief {
 	.main-about-container {
 		flex-direction: row;
 		align-items: flex-start;
-		gap: 0.5rem;
 	}
 
 	.contact-us-container {

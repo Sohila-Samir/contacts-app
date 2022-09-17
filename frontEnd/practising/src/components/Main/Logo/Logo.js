@@ -1,14 +1,7 @@
-import logo from './assets/logo.png'
-
-import './Logo.css'
+import "./Logo.css";
 
 const Logo = () => {
-  return (
-    <div className="logo-container">
-      <img src={logo} className="logo"></img>
-      <span className="brand-name">Conta</span>
-    </div>
-  );
-}
+	return <span className="brand-name">Conta</span>;
+};
 
 export default Logo;

@@ -2,9 +2,9 @@ import fs from "fs";
 import path from "path";
 import { Request, Response, NextFunction } from "express";
 import { UserModel } from "../models/User";
-import ExpressError from "../utils/ExpressError";
+import ExpressError from "../utils/main/ExpressError";
 
-const removeImage = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const removeUserImg = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
 	try {
 		const { id } = req.params;
 		const user = await UserModel.findById(id);
@@ -20,7 +20,7 @@ const removeImage = async (req: Request, res: Response, next: NextFunction): Pro
 			);
 
 			fs.unlink(userAvatarImgPath, (err: unknown) => {
-				if (err && err instanceof Error) throw new ExpressError(err.message, 400, err.name);
+				if (err && err instanceof Error) console.log("removing user image error");
 				next();
 			});
 		} else {
@@ -31,4 +31,4 @@ const removeImage = async (req: Request, res: Response, next: NextFunction): Pro
 	}
 };
 
-export default removeImage;
+export default removeUserImg;

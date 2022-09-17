@@ -3,11 +3,14 @@ import path from "path";
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 
-import ExpressError from "../utils/ExpressError";
+import ExpressError from "../utils/main/ExpressError";
 
 const verifyUser = (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const publicKey = fs.readFileSync(path.join(__dirname, "../utils/PUB_KEY.pem"), "utf8");
+		const publicKey = fs.readFileSync(
+			path.join(__dirname, "..", "/utils", "/auth", "/PUB_KEY.pem"),
+			"utf8"
+		);
 
 		const authHeader = req.headers.authorization;
 
@@ -18,6 +21,7 @@ const verifyUser = (req: Request, res: Response, next: NextFunction) => {
 		jwt.verify(token, publicKey, { algorithms: ["RS256"] }, (err, decoded) => {
 			if (err) throw new ExpressError("token is not valid", 403);
 			res.locals.user = decoded;
+
 			next();
 		});
 	} catch (err: unknown) {

@@ -1,7 +1,10 @@
 import mongoose, { Schema } from "mongoose";
+import redisClient from "../config/redis";
 
-import ExpressError from "../utils/ExpressError";
-import { verifyPassword, hashPassword } from "./../utils/passwordUtils";
+import ROLES from "../config/roles";
+import { ContactsModel } from "./Contact";
+import { verifyPassword, hashPassword } from "../utils/main/passwordUtils";
+import ExpressError from "../utils/main/ExpressError";
 
 import { UserType, refreshTokenQueryOptions } from "../Types/user-types";
 import UserModelI from "./../Types/user-types";
@@ -9,42 +12,43 @@ import UserModelI from "./../Types/user-types";
 const UserSchema = new Schema({
 	username: {
 		unique: true,
-		required: [true, "username is required!"],
+		required: true,
 		type: String,
 		trim: true,
 	},
 
 	password: {
 		unique: true,
-		required: [true, "password is required!"],
+		required: true,
 		type: String,
 		select: false,
 		trim: true,
 	},
-	// "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
+
 	salt: {
 		unique: true,
-		required: [true, "salt is required!"],
+		required: true,
 		type: String,
 		select: false,
 	},
 
 	email: {
 		unique: true,
-		required: [true, "email is required!"],
+		required: true,
 		type: String,
 		trim: true,
 	},
 
 	name: {
-		required: [true, "name is required!"],
+		required: true,
 		type: String,
 		trim: true,
 	},
 
-	admin: {
-		type: Boolean,
-		default: false,
+	roles: {
+		required: true,
+		type: [Number],
+		default: [ROLES.USER],
 	},
 
 	phoneNumber: {
@@ -57,15 +61,13 @@ const UserSchema = new Schema({
 		default: null,
 	},
 
-	refreshTokens: {
-		type: [String],
-		default: [],
-		select: false,
-	},
-
 	userAvatar: {
 		type: String,
 		default: null,
+	},
+	verified: {
+		type: Boolean,
+		default: false,
 	},
 });
 
@@ -87,52 +89,38 @@ UserSchema.statics.findAndVerifyPassword = async function (
 	}
 };
 
-UserSchema.statics.findAndUpdateRefreshToken = async function (
+UserSchema.statics.findAndUpdateRefreshTokens = async function (
 	id: string,
-	refreshToken: string = "",
 	options: refreshTokenQueryOptions = {
 		isAdd: false,
-		isRemove: false,
-		isEmpty: false,
+		isReset: false,
 		isReplace: false,
-		newToken: "",
-	}
+		newRefreshToken: "",
+	},
+	refreshToken?
 ): Promise<boolean | undefined> {
 	try {
-		const user: UserType = await this.findById(id).select("+refreshTokens");
+		const user = await UserModel.findById(id);
+		const userRefreshTokens = await redisClient.LRANGE(`RTs_${id}`, 0, -1);
 
-		if (!user) throw new ExpressError("user is not found!");
+		if (!user) throw new ExpressError("user not found!", 400);
 
-		if (!user.refreshTokens.includes(refreshToken) && !options.isAdd) {
-			await this.updateOne({ email: user.email }, { refreshTokens: [] });
-			throw new ExpressError("invalid token, re-use token is dedicated!", 403);
-		}
-
-		if (options.isEmpty) {
-			await this.updateOne({ email: user.email }, { refreshTokens: [] });
+		if (!userRefreshTokens.includes(refreshToken) && options.isReplace) {
+			await redisClient.DEL(`RTs_${id}`);
+			throw new ExpressError("unauthorized token!", 403);
 		}
 
 		if (options.isAdd) {
-			const newRefreshTokens = user.refreshTokens;
-			newRefreshTokens.push(refreshToken as string);
-
-			await this.updateOne({ email: user.email }, { refreshTokens: newRefreshTokens });
-		}
-
-		if (options.isRemove) {
-			await this.updateOne(
-				{ email: user.email },
-				{
-					refreshTokens: user.refreshTokens.filter((tkn: string) => tkn !== refreshToken),
-				}
-			);
+			await redisClient.LPUSH(`RTs_${id}`, refreshToken);
 		}
 
 		if (options.isReplace) {
-			const newRefreshTokens = user.refreshTokens.filter((token: string) => token !== refreshToken);
-			newRefreshTokens.push(options.newToken as string);
+			await redisClient.LREM(`RTs_${id}`, 0, refreshToken);
+			await redisClient.LPUSH(`RTs_${id}`, options.newRefreshToken as any);
+		}
 
-			await this.updateOne({ email: user.email }, { refreshTokens: newRefreshTokens });
+		if (options.isReset) {
+			await redisClient.DEL(`RTs_${id}`);
 		}
 
 		return true;
@@ -150,12 +138,14 @@ UserSchema.pre("validate", async function (next) {
 			const userVerifyCredentials = await hashPassword(this.password);
 
 			this.salt = userVerifyCredentials?.salt as string;
+
 			this.password = userVerifyCredentials?.password as string;
+
 			next();
 		}
 	} catch (err: unknown) {
 		if (err && err instanceof Error) {
-			next(err);
+			throw new ExpressError(err.message, 400, err.name);
 		}
 	}
 });
@@ -164,17 +154,39 @@ export const UserModel: UserModelI = mongoose.model("User", UserSchema) as UserM
 
 // CRUD operations
 class User {
+	async checkUserExistence(username: string) {
+		try {
+			const isUser = await UserModel.findOne({ username });
+			if (isUser) return true;
+			return false;
+		} catch (err) {
+			if (err && err instanceof Error) throw new ExpressError(err.message, 400, err.name);
+		}
+	}
+
+	async getUsers() {
+		try {
+			const users = await UserModel.find();
+
+			return users;
+		} catch (err) {
+			if (err && err instanceof Error) {
+				throw new ExpressError(err.message, 400, err.name);
+			}
+		}
+	}
+
 	async createUser(data: UserType): Promise<UserType | Error | undefined | unknown> {
 		try {
 			const user = await UserModel.create(data);
 			return {
+				_id: user._id,
 				username: user.username,
 				name: user.name,
 				userAvatar: user.userAvatar,
 				email: user.email,
 				phoneNumber: user.phoneNumber,
 				birthday: user.birthday,
-				admin: user.admin,
 			};
 		} catch (err: unknown) {
 			if (err && err instanceof (ExpressError || Error)) {
@@ -183,9 +195,10 @@ class User {
 		}
 	}
 
-	async getUser(id: string): Promise<UserType | Error | null | undefined> {
+	async getUser(id: string): Promise<UserType | Error | undefined> {
 		try {
-			const foundUser: UserType | null = await UserModel.findById(id);
+			const foundUser = (await UserModel.findById(id)) as UserType;
+
 			return foundUser;
 		} catch (err: unknown) {
 			if (err && err instanceof (ExpressError || Error)) {
@@ -194,14 +207,16 @@ class User {
 		}
 	}
 
-	async deleteUser(id: string): Promise<UserType | Error | null | undefined> {
+	async deleteUser(id: string): Promise<mongoose.Types.ObjectId | Error | undefined | null> {
 		try {
-			const deletedUser: UserType | null = await UserModel.findByIdAndDelete(id).select([
+			const user: UserType | null = await UserModel.findByIdAndDelete(id).select([
 				"-password",
 				"-salt",
-				"-refreshTokens",
 			]);
-			return deletedUser;
+
+			await ContactsModel.deleteMany({ userID: id });
+
+			return user?._id;
 		} catch (err: unknown) {
 			if (err && err instanceof (ExpressError || Error)) {
 				throw new ExpressError(err.message, 400, err.name);

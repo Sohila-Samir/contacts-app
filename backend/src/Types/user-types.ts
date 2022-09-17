@@ -1,35 +1,35 @@
 import { Model } from "mongoose";
 import mongoose from "mongoose";
+import { SchemaRole } from "./role-type";
 
 export type UserType = {
 	_id: mongoose.Types.ObjectId;
-	refreshTokens: string[];
 	name: string;
 	username: string;
 	password: string;
 	salt: string;
 	email: string;
-	admin: boolean;
+	verified: boolean;
+	roles: SchemaRole;
 	birthday?: Date;
 	phoneNumber?: number;
 	userAvatar?: string;
 };
 
 export type refreshTokenQueryOptions = {
+	isReset?: boolean;
 	isAdd?: boolean;
-	isRemove?: boolean;
 	isReplace?: boolean;
-	isEmpty?: boolean;
-	newToken?: string;
+	newRefreshToken?: string;
 };
 
 interface UserModelI extends Model<UserType> {
 	findAndVerifyPassword(email: string, password: string): Promise<UserType | undefined>;
 
-	findAndUpdateRefreshToken(
+	findAndUpdateRefreshTokens(
 		id: mongoose.Types.ObjectId,
-		refreshToken: string | undefined,
-		options: refreshTokenQueryOptions
+		options: refreshTokenQueryOptions,
+		refreshToken?: string | undefined
 	): Promise<boolean>;
 }
 

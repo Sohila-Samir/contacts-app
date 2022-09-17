@@ -1,0 +1,136 @@
+section.contact-details-section {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 1.2rem;
+}
+
+.contact-details-page {
+	width: 100%;
+	max-width: 590px;
+	border-radius: 20px;
+	box-shadow: 0px 0px 15px 7px silver;
+	background-color: #e0f7fa;
+}
+
+.contact-header-details-page {
+	display: flex;
+	border-radius: 20px 20px 0 0;
+	padding: 1.5rem;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.contact-body {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	padding: 1.5rem;
+	border-radius: 20px;
+}
+
+.contact-avatar-container-details-page {
+	width: fit-content;
+}
+
+.contact-avatar-container-details-page img {
+	border-radius: 50%;
+	width: 100%;
+}
+
+.contact-primary-info {
+	display: flex;
+	flex-direction: column;
+	margin-block-start: 1rem;
+	text-align: center;
+	color: #0e192b;
+}
+
+.contact-primary-info p {
+	font-size: 1.3rem;
+	font-weight: 400;
+}
+
+a.Link.update-link {
+	background-image: url("./assets/edit-contact-icon.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+	aspect-ratio: 1/1;
+	width: 25px;
+	position: absolute;
+	top: 10%;
+	right: 20px;
+	padding: 0.8rem;
+}
+
+ul.contact-secondary-option {
+	width: 100%;
+	display: flex;
+	justify-content: space-evenly;
+	align-items: flex-start;
+	flex-direction: column;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.contact-secondary-item-container {
+	display: flex;
+	width: 100%;
+	margin-block-end: 1.6rem;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+p.contact-secondary-item-label {
+	font-weight: 600;
+	margin-inline-end: 0.5rem;
+	font-size: 1.1rem;
+	color: #0e192b;
+	margin-block-end: 0.4rem;
+}
+
+.contact-secondary-item-container a {
+	margin-inline-start: auto;
+	width: 25px;
+	cursor: pointer;
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 0;
+	background-repeat: no-repeat;
+	background-size: cover;
+	width: 25px;
+	aspect-ratio: 1/1;
+	padding: 0;
+}
+
+.contact-details-mail-link {
+	background-image: url("./assets/gmail.png");
+}
+
+.contact-details-call-link {
+	background-image: url("./assets/call-icon.png");
+}
+
+p.contact-secondary-item {
+	white-space: break-spaces;
+	color: gray;
+	font-weight: 500;
+}
+
+.delete-contact-details-page {
+	padding: 0.7rem 2rem;
+	background-color: #0e192b;
+	color: #ffffff;
+	border-radius: 20px;
+	margin-block: 0.5rem;
+}
+
+@media (hover: hover) {
+	.delete-contact-details-page:hover {
+		background-color: transparent;
+		color: #0e192b;
+		border: 1px solid #0e192b;
+	}
+}

@@ -1,13 +1,12 @@
 .PhoneInput {
 	display: flex;
 	align-items: center;
-	margin-bottom: 2rem;
-	padding: 1em;
+	padding: 0.7rem;
 	outline: none;
-	border: none;
-	border-bottom: 1px solid #f9f7ff;
-	border-radius: 3px;
-	background-color: transparent;
+	background-color: white;
+	width: 100%;
+	border: 1px solid silver;
+	border-radius: 5px;
 	transition: border 0.3s ease-in-out;
 	-webkit-transition: border 0.3s ease-in-out;
 	-moz-transition: border 0.3s ease-in-out;
@@ -17,9 +16,9 @@
 
 .PhoneInputInput {
 	outline: none;
-	border: 2px solid transparent;
-	background-color: transparent;
-	color: #f9f7ff;
+	border: none;
+	color: gray;
+	font-weight: 600;
 }
 
 .PhoneInputCountry {
@@ -31,12 +30,11 @@
 }
 
 .PhoneInputInput::placeholder {
-	color: #e5e3ea;
+	color: silver;
 }
 
 .PhoneInputCountrySelect {
-	background-color: var(--main-bg-color);
-	color: var(--main-color);
+	color: gray;
 }
 
 .PhoneInputCountrySelect::-webkit-scrollbar {
@@ -44,9 +42,9 @@
 }
 
 .PhoneInputCountrySelect::-webkit-scrollbar-track {
-	background-color: #e5e3ea;
+	background-color: #e3e6ea;
 }
 
 .PhoneInputCountrySelect::-webkit-scrollbar-thumb {
-	background-color: #5852f2;
+	background-color: #0f1b25;
 }

@@ -1,0 +1,43 @@
+.modal-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 1rem;
+	position: absolute;
+	bottom: 25px;
+	right: 25px;
+	width: 340px;
+	column-gap: 1rem;
+	overflow: hidden;
+	border-radius: 5px;
+	z-index: 1000;
+}
+
+.message-text {
+	line-height: 22px;
+	text-align: start;
+}
+
+.close-icon {
+	cursor: pointer;
+	font-weight: 700;
+	font-size: 1.2rem;
+	align-self: flex-start;
+}
+
+.modal-container.success {
+	background-color: #cceacc;
+	color: #034c03;
+}
+.modal-container.error {
+	background-color: #f2cccc;
+	color: #5e0c0c;
+}
+.modal-container.info {
+	background-color: #dfeaff;
+	color: #2b4771;
+}
+.modal-container.default {
+	background-color: #e0e0e0;
+	color: #000000;
+}

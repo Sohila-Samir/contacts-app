@@ -1,34 +1,43 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+
+import ContactsContext from "../../Contexts/ContactsContext";
+import { deleteContact } from "../../axios/api-endpoints/Contact-endpoints";
+
+import usePrivateInstance from "./../../hooks/usePrivateInstance";
 
 import Button from "../Main/Button/Button";
-import { deleteContact }from './../../utils/endpoints'
 
-const DeleteContact = ({ contactID, contacts, setContacts, onSetQueriedContacts }) => {
-  const [isWantToDelete, setIsWantToDelete] = useState(false);
+const DeleteContact = ({ contactID, className, text }) => {
+	const { dispatch } = useContext(ContactsContext);
+	const privateInstance = usePrivateInstance();
+	const navigate = useNavigate();
 
-  useEffect(() => {
-    if (isWantToDelete) {
-      const requestDeleteContact = async () => {
-        await deleteContact(contactID);
-        setContacts(contacts.filter((MContact) => MContact._id !== contactID));
-        onSetQueriedContacts(queriedContacts => queriedContacts.filter((QContact) => QContact._id !== contactID));
-      };
-      requestDeleteContact();
-    }
-  }, [isWantToDelete]);
+	const requestDeleteContact = async signal => {
+		const res = await deleteContact(privateInstance, contactID, signal);
 
-  const handleFunction = (e) => {
-    setIsWantToDelete(true)
-  }
+		if (res) {
+			dispatch({ type: "DELETE_CONTACT", payload: { _id: res } });
 
-  return (
-    <Button
-      handleFunction={handleFunction}
-      className="delete-contact-btn"
-      custom={true}
-      isSecondary={false}
-    />
-  )
+			navigate("/contacts");
+		}
+	};
+
+	const handleFunction = e => {
+		const controller = new AbortController();
+
+		requestDeleteContact(controller.signal);
+	};
+
+	return (
+		<Button
+			handleFunction={handleFunction}
+			text={text}
+			className={className}
+			custom={true}
+			isSecondary={false}
+		/>
+	);
 };
 
 export default DeleteContact;

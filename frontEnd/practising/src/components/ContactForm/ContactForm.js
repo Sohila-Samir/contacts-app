@@ -1,119 +1,177 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useRef } from "react";
 
-import { useState, useEffect } from "react";
-
-import Heading from "./../Main/Heading/Heading";
-import Button from "../Main/Button/Button";
-import ImageInput from "./../ImageInput/ImageInput";
-import PhoneNumber from "./../PhoneNumber/PhoneNumber";
 import FormInput from "../Main/FormInput/FormInput";
+import ImageInput from "../ImageInput/ImageInput";
+import Button from "../Main/Button/Button";
+import PhoneNumber from "../PhoneNumber/PhoneNumber";
+
+import usePrivateInstance from "../../hooks/usePrivateInstance";
 
 import "./ContactForm.css";
 
-const ContactForm = ({ setContacts, contacts, formActionHandler, formHeadingText }) => {
-	const navigate = useNavigate();
-	const { id } = useParams();
-	const api = "http://localhost:2022";
+const ContactForm = ({ submitFunction, dataToUse, dataDispatchFunction }) => {
+	const optionalFormFields = useRef(null);
+	const expandIcon = useRef(null);
+	const privateInstance = usePrivateInstance();
 
-	const chooseDataToUse = () => {
-		if (id) {
-			return contacts.filter(contact => contact._id === id)[0];
-		} else {
-			return {
-				name: "",
-				handle: "",
-				contactAvatar: "",
-				phoneNumberInfo: {
-					internationalNumber: "",
-					nationalNumber: "",
-					countryCode: "",
-				},
-			};
-		}
-	};
-	const [isWantToSubmit, setIsWantToSubmit] = useState(false);
-	const [dataToUse, setDataToUse] = useState(chooseDataToUse());
-
-	useEffect(() => {
-		if (isWantToSubmit && dataToUse.phoneNumberInfo) {
-			const makeRequest = async () => {
-				const res = await formActionHandler(dataToUse);
-				return res;
-			};
-
-			makeRequest().then(newData => {
-				if (newData.data) {
-					const filterContacts = contacts.filter(contact => contact._id !== newData.data._id);
-					setContacts([...filterContacts, newData.data]);
-					navigate("/contacts", { replace: true });
-				}
-			});
-		} else {
-			setIsWantToSubmit(false);
-		}
-	}, [isWantToSubmit]);
-
-	const onHandleDataToUseChange = e => {
-		e.target.files
-			? setDataToUse(prevState => ({ ...prevState, [e.target.name]: e.target.files[0] }))
-			: setDataToUse(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
-	};
-
-	const handleSubmit = async e => {
+	const handleSubmit = e => {
 		e.preventDefault();
-		setIsWantToSubmit(true);
+		const controller = new AbortController();
+		submitFunction(privateInstance, controller.signal, dataToUse);
+	};
+
+	const handleInputChange = e => {
+		dataDispatchFunction({
+			type: "CHANGE_SINGLE_INPUT",
+			payload: { name: e.target.name, value: e.target.value },
+		});
+	};
+
+	const expandOptionalFormFields = e => {
+		optionalFormFields.current.classList.toggle("expand-optional-form-fields");
+		expandIcon.current.classList.toggle("rotate-expand-icon");
 	};
 
 	return (
-		<div className="contact-form-container">
-			<Link className="close-contact-form " to="/contacts"></Link>
+		<>
+			<section className="form-container">
+				<div className="form-header">
+					<h2>Contact Form</h2>
+				</div>
 
-			<Heading text={formHeadingText} />
+				<form encType="multipart/form-data" onSubmit={handleSubmit} className="contact-form">
+					<div className="contact-form-primary-options">
+						<h3>Primary</h3>
+						<FormInput
+							id="name"
+							className="name-input-field"
+							type="text"
+							name="name"
+							value={dataToUse?.name}
+							onChangeHandlerFN={handleInputChange}
+							isRequired={true}
+						/>
 
-			<form
-				encType="multipart/form-data"
-				onSubmit={handleSubmit}
-				className="contact-form"
-				action={`${api}/api/contacts/new`}
-				method="post">
-				<ImageInput
-					className="create-contact-avatar-input"
-					dataToUse={dataToUse}
-					onHandleDataToUseChange={onHandleDataToUseChange}
-					setDataToUse={setDataToUse}
-				/>
-				<div className="contact-form-details-container">
-					<FormInput
-						className="form-input-field"
-						type="text"
-						name="name"
-						placeholder="Name"
-						value={dataToUse?.name}
-						onChangeHandlerFN={onHandleDataToUseChange}
-						isRequired={true}
-					/>
+						<FormInput
+							id="handle"
+							className="handle-input-field"
+							type="text"
+							name="handle"
+							value={dataToUse?.handle}
+							onChangeHandlerFN={handleInputChange}
+							isRequired={true}
+						/>
 
-					<FormInput
-						className="form-input-field"
-						type="text"
-						name="handle"
-						placeholder="Handle"
-						value={dataToUse?.handle}
-						onChangeHandlerFN={onHandleDataToUseChange}
-						isRequired={true}
-					/>
+						<div className="form-input-field">
+							<label htmlFor="phoneNumber">Phone Number:</label>
+							<PhoneNumber handleDataFN={dataDispatchFunction} dataToUse={dataToUse} />
+						</div>
+					</div>
 
-					<PhoneNumber setDataToUse={setDataToUse} dataToUse={dataToUse} />
+					{/* --------------------------------------------------------------------------------- */}
+
+					<div className="contact-form-optional-options">
+						<div className="heading-container">
+							<h3>Optional</h3>
+							<span
+								className="expand-icon"
+								ref={expandIcon}
+								onClick={expandOptionalFormFields}></span>
+						</div>
+						<div className="optional-fields-container" ref={optionalFormFields}>
+							<ImageInput
+								className="create-contact-avatar-input"
+								dataToUse={dataToUse}
+								handleDataFN={dataDispatchFunction}
+							/>
+
+							<div className="category-container">
+								<div className="category-option">
+									<input
+										type="radio"
+										name="category"
+										value="family"
+										id="family"
+										onClick={handleInputChange}
+									/>
+									<label htmlFor="family">family</label>
+								</div>
+
+								<div className="category-option">
+									<input
+										type="radio"
+										name="category"
+										value="friends"
+										id="friends"
+										onClick={handleInputChange}
+									/>
+									<label htmlFor="friends">friends</label>
+								</div>
+
+								<div className="category-option">
+									<input
+										type="radio"
+										name="category"
+										value="co-workers"
+										id="co-workers"
+										onClick={handleInputChange}
+									/>
+									<label htmlFor="co-workers">co-workers</label>
+								</div>
+
+								<div className="category-option">
+									<input
+										type="radio"
+										name="category"
+										value="relatives"
+										id="relatives"
+										onClick={handleInputChange}
+									/>
+									<label htmlFor="relatives">relatives</label>
+								</div>
+
+								<div className="category-option">
+									<input
+										type="radio"
+										name="category"
+										value=""
+										id="none"
+										onClick={handleInputChange}
+									/>
+									<label htmlFor="none">None</label>
+								</div>
+							</div>
+
+							<FormInput
+								id="email"
+								className="email-input-field"
+								type="email"
+								name="email"
+								value={dataToUse?.email}
+								onChangeHandlerFN={handleInputChange}
+							/>
+
+							<FormInput
+								id="address"
+								className="address-input-field"
+								type="text"
+								name="address"
+								value={dataToUse?.address}
+								onChangeHandlerFN={handleInputChange}
+							/>
+						</div>
+					</div>
 
 					<Button
 						type="submit"
-						text={formHeadingText}
+						text={"Submit"}
 						isSecondary={false}
 						className="submit-contact-form-btn"
 					/>
-				</div>
-			</form>
-		</div>
+				</form>
+			</section>
+		</>
 	);
 };
+
 export default ContactForm;
