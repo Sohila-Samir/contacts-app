@@ -1,104 +1,146 @@
-import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import FormInput from "./../../components/Main/FormInput/FormInput";
 import PasswordLogic from "../../components/Main/PasswordLogic/PasswordLogic";
 import Button from "./../../components/Main/Button/Button";
 import CustomLink from "./../../components/Main/CustomLink/CustomLink";
+import FormInput from "./../../components/Main/FormInput/FormInput";
 
-import useAuth from "../../hooks/useAuth";
 import { login } from "../../axios/api-endpoints/auth-endpoints";
+import useAuth from "../../hooks/useAuth";
 
 import "./Login.css";
 
 const Login = () => {
-	const navigate = useNavigate();
-	const location = useLocation();
-	const from = location.state?.from?.pathname || "/";
-	const { handleAuthData } = useAuth();
-	const [loginFormData, setLoginFormData] = useState({
-		email: "",
-		password: "",
-		confirmPassword: "",
-	});
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+  const { handleAuthData } = useAuth();
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loginFormData, setLoginFormData] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-	const matchPasswords = () => {
-		const pwd = document.querySelector("#password");
+  useEffect(() => {
+    const isPersist = localStorage.getItem("persist");
+    const isTrustDevice = document.querySelector("#trustDevice");
+    isPersist
+      ? (isTrustDevice.checked = true)
+      : (isTrustDevice.checked = false);
+  }, []);
 
-		const confirmPwd = document.querySelector("#confirm-password");
+  const matchPasswords = () => {
+    const pwd = document.querySelector("#password");
 
-		if (pwd.value !== confirmPwd.value) {
-			confirmPwd.style.borderColor = "#ff0000";
-			return false;
-		}
+    const confirmPwd = document.querySelector("#confirm-password");
 
-		return true;
-	};
+    if (pwd.value !== confirmPwd.value) {
+      confirmPwd.style.borderColor = "#ff0000";
+      return false;
+    }
 
-	const handleFormData = e => {
-		setLoginFormData(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
-	};
+    return true;
+  };
 
-	const requestLogin = async signal => {
-		const res = await login(loginFormData, signal);
+  const handleFormData = (e) => {
+    setLoginFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
-		const trustDeviceBtn = document.querySelector(".trustDevice");
+  const requestLogin = async (signal) => {
+    const res = await login(loginFormData, signal);
 
-		if (res.accessToken) {
-			trustDeviceBtn.checked
-				? localStorage.setItem("persist", "$persistCode@74123698")
-				: localStorage.removeItem("persist");
+    if (!res.success) setErrorMessage(res.message);
 
-			handleAuthData(res);
+    const trustDeviceBtn = document.querySelector(".trustDevice");
 
-			navigate(from, { replace: true });
-		}
-	};
+    if (res.data.accessToken) {
+      trustDeviceBtn.checked
+        ? localStorage.setItem("persist", "$persistCode@74123698")
+        : localStorage.removeItem("persist");
 
-	const handleSubmit = e => {
-		e.preventDefault();
+      handleAuthData(res.data);
 
-		if (matchPasswords()) {
-			const controller = new AbortController();
-			requestLogin(controller.signal);
-		}
-	};
+      navigate(from, { replace: true });
+    }
+  };
 
-	return (
-		<>
-			<section className="login-container">
-				<form action="" onSubmit={handleSubmit} className="login-form">
-					<h2>Login</h2>
+  const toggleIsTrustDevice = (e) => {
+    e.target.checked
+      ? localStorage.setItem("persist", "$persistCode@74123698")
+      : localStorage.removeItem("persist");
+  };
 
-					<FormInput
-						id="email"
-						className="email-input-field"
-						type="email"
-						name="email"
-						value={loginFormData?.email}
-						isRequired={true}
-						onChangeHandlerFN={handleFormData}
-					/>
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-					<PasswordLogic dataToUse={loginFormData} handleFormData={handleFormData} />
+    if (matchPasswords()) {
+      const controller = new AbortController();
+      requestLogin(controller.signal);
+    }
+  };
 
-					<div className="trustDevice-container">
-						<input id="trustDevice" type="checkbox" className="trustDevice" />
-						<label htmlFor="trustDevice">Trust this device?</label>
-					</div>
+  return (
+    <>
+      <section className="login-container">
+        <form action="" onSubmit={handleSubmit} className="login-form">
+          <h2>Login</h2>
 
-					<Button isSecondary={false} className="submit-login-form" text="Submit" type="submit" />
+          <FormInput
+            id="email"
+            className="email-input-field"
+            type="email"
+            name="email"
+            value={loginFormData?.email}
+            isRequired={true}
+            onChangeHandlerFN={handleFormData}
+          />
 
-					<CustomLink
-						URL="/register"
-						text="don't have account? Sign Up"
-						custom={true}
-						className="register-link"
-					/>
-				</form>
-			</section>
-		</>
-	);
+          <PasswordLogic
+            dataToUse={loginFormData}
+            handleFormData={handleFormData}
+          />
+
+          {errorMessage ? <p className="error-message">{errorMessage}</p> : ""}
+
+          <a
+            href="http://localhost:3000/forgot-password"
+            className="forgot-password-link"
+          >
+            Forgot Password?
+          </a>
+
+          <div className="trustDevice-container">
+            <input
+              id="trustDevice"
+              type="checkbox"
+              className="trustDevice"
+              onChange={toggleIsTrustDevice}
+            />
+            <label htmlFor="trustDevice">Trust this device?</label>
+          </div>
+
+          <Button
+            isSecondary={false}
+            className="submit-login-form"
+            text="Submit"
+            type="submit"
+          />
+
+          <CustomLink
+            URL="/register"
+            text="don't have account? Sign Up"
+            custom={true}
+            className="register-link"
+          />
+        </form>
+      </section>
+    </>
+  );
 };
 
 export default Login;
