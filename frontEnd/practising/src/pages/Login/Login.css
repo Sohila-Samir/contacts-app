@@ -43,10 +43,15 @@ button.main.btn.submit-login-form {
   margin-block-start: 1.5rem;
 }
 
-.error-message {
+.error-message,
+.capsLock-detect-msg {
   color: red;
   text-align: start;
   margin-block-end: 1rem;
+}
+
+.capsLock-detect-msg {
+  color: #0f1b25;
 }
 
 .forgot-password-link {

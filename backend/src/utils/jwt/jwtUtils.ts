@@ -37,7 +37,7 @@ export const generateRefreshToken = (
     );
 
     return jwt.sign(payload, privateRefreshKey, {
-      expiresIn: "4d",
+      expiresIn: "15s",
       issuer: "http://localhost:2022",
       audience: "http://localhost:3000",
       algorithm: "RS256",

@@ -1,11 +1,11 @@
 .brand-name {
-	letter-spacing: 5px;
-	font-size: 1.5rem;
-	font-weight: 600;
-	color: #ffffff;
+  letter-spacing: 5px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #ffffff;
 }
 
 .brand-name::first-letter {
-	color: #e0f7fa;
-	font-size: larger;
+  color: #e0f7fa;
+  font-size: larger;
 }

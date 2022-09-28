@@ -1,8 +1,8 @@
 * {
-	box-sizing: border-box;
-	padding: 0;
-	margin: 0;
-	position: relative;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  position: relative;
 }
 
 p,
@@ -13,26 +13,26 @@ h4,
 h5,
 h6,
 span {
-	text-transform: capitalize;
+  text-transform: capitalize;
 }
 
 body {
-	min-height: 100vh;
-	background-color: #ffffff;
-	font-family: cursive, serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  background-color: #ffffff;
+  font-family: cursive, serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .App {
-	text-align: center;
-	min-height: 100vh;
+  text-align: center;
+  min-height: 100vh;
 }
 
 li {
-	list-style: none;
+  list-style: none;
 }
 
 a {
-	text-decoration: none;
+  text-decoration: none;
 }

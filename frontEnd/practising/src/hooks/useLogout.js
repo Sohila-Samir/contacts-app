@@ -13,8 +13,6 @@ const useLogout = () => {
 
       await logout(privateInstance, controller.signal);
 
-      // localStorage.removeItem("persist");
-
       handleAuthData({ user: "", roles: [], accessToken: "" });
     } catch (err) {
       console.log(err);

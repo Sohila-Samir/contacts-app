@@ -1,140 +1,140 @@
 footer {
-	bottom: 0;
-	left: 0;
-	background-color: #0f1b25;
-	color: #ffffff;
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
-	padding: 3rem;
-	width: 100%;
-	margin-top: 3rem;
-	gap: 2.5rem;
+  bottom: 0;
+  left: 0;
+  background-color: #0f1b25;
+  color: #ffffff;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+  padding: 3rem;
+  width: 100%;
+  margin-top: 3rem;
+  gap: 2.5rem;
 }
 
 .main-about-container {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	gap: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5rem;
 }
 
 .about-container {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	gap: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem;
 }
 
 p.footer-about-brief {
-	width: 100%;
-	max-width: 180px;
-	color: #d8d8d8;
-	line-height: 1.5rem;
+  width: 100%;
+  max-width: 180px;
+  color: #d8d8d8;
+  line-height: 1.5rem;
 }
 
 .footer-media-links-container {
-	width: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
 }
 
 .footer-media-links-container a {
-	width: 25px;
-	aspect-ratio: 1 / 1;
-	background-size: cover;
-	background-repeat: no-repeat;
-	padding: 0.6rem;
+  width: 25px;
+  aspect-ratio: 1 / 1;
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding: 0.6rem;
 }
 
 .footer-facebook-link {
-	background-image: url("./assets/facebook.png");
+  background-image: url("./assets/facebook.png");
 }
 
 .footer-twitter-link {
-	background-image: url("./assets/twitter.png");
+  background-image: url("./assets/twitter.png");
 }
 
 .footer-linkedin-link {
-	background-image: url("./assets/linkedin.png");
+  background-image: url("./assets/linkedin.png");
 }
 
 .links-container {
-	display: grid;
-	grid-template-columns: repeat(3, 70px);
-	justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(3, 70px);
+  justify-content: center;
 }
 
 .links-container a {
-	margin: auto;
-	width: fit-content;
-	padding-inline: 0;
-	padding-block: 0.3rem;
+  margin: auto;
+  width: fit-content;
+  padding-inline: 0;
+  padding-block: 0.3rem;
 }
 
 .links-container a:hover {
-	color: #e0f7fa;
+  color: #e0f7fa;
 }
 
 .contact-us-container {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 2rem;
-	padding-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding-top: 0.5rem;
 }
 
 .contact-us-heading-container {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .contact-us-container h3 {
-	letter-spacing: 3px;
+  letter-spacing: 3px;
 }
 
 .contacts-options-container {
-	display: flex;
-	gap: 1rem;
+  display: flex;
+  gap: 1rem;
 }
 
 .logos-icons-container {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
 .contacts-options-details {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-items: self-start;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: self-start;
 }
 
 .contacts-options-details p {
-	text-align: left;
+  text-align: left;
 }
 
 @media screen and (min-width: 768px) {
-	footer {
-		gap: 4.5rem;
-	}
+  footer {
+    gap: 4.5rem;
+  }
 
-	.main-about-container {
-		flex-direction: row;
-		align-items: flex-start;
-	}
+  .main-about-container {
+    flex-direction: row;
+    align-items: flex-start;
+  }
 
-	.contact-us-container {
-		align-items: flex-start;
-	}
+  .contact-us-container {
+    align-items: flex-start;
+  }
 
-	.links-container {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-	}
+  .links-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  }
 }

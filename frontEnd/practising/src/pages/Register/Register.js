@@ -1,170 +1,208 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 import Button from "./../../components/Main/Button/Button";
+import CustomLink from "./../../components/Main/CustomLink/CustomLink";
 import FormInput from "./../../components/Main/FormInput/FormInput";
 import PasswordLogic from "./../../components/Main/PasswordLogic/PasswordLogic";
-import CustomLink from "./../../components/Main/CustomLink/CustomLink";
 
-import { checkUserExistence, sendUserVerifyEmail } from "../../axios/api-endpoints/User-endpoints";
-import { register, login } from "./../../axios/api-endpoints/auth-endpoints";
+import {
+  checkUserExistence,
+  sendUserVerifyEmail,
+} from "../../axios/api-endpoints/User-endpoints";
+import useDetectCapsLockState from "../../hooks/useDetectCapsLockState";
+import { login, register } from "./../../axios/api-endpoints/auth-endpoints";
 import useAuth from "./../../hooks/useAuth";
 
 import "./Register.css";
 
 const Register = () => {
-	const { handleAuthData } = useAuth();
+  const { handleAuthData } = useAuth();
+  const [handleCapsLockState, CapsLockDetect] = useDetectCapsLockState();
 
-	const navigate = useNavigate();
+  const navigate = useNavigate();
 
-	const [isUsernameExists, setIsUsernameExists] = useState("");
+  const [isUsernameExists, setIsUsernameExists] = useState("");
 
-	const [registerFormData, setRegisterFormData] = useState({
-		username: "",
-		name: "",
-		password: "",
-		email: "",
-		phoneNumber: "",
-		birthday: "",
-		userAvatar: "",
-	});
+  const [registerFormData, setRegisterFormData] = useState({
+    username: "",
+    name: "",
+    password: "",
+    email: "",
+    phoneNumber: "",
+    birthday: "",
+    userAvatar: "",
+  });
 
-	useEffect(() => {
-		let isUserExists;
-		if (registerFormData.username) {
-			isUserExists = setTimeout(async () => {
-				const controller = new AbortController();
-				const res = await checkUserExistence(registerFormData.username, controller.signal);
-				if (res) setIsUsernameExists("user already exists");
-			}, 1000);
-		} else {
-			setIsUsernameExists("");
-		}
+  useEffect(() => {
+    document.addEventListener("keyup", handleCapsLockState);
 
-		return () => {
-			clearTimeout(isUserExists);
-		};
-	}, [registerFormData.username]);
+    return () => {
+      document.removeEventListener("keyup", handleCapsLockState);
+    };
+  }, [handleCapsLockState, CapsLockDetect]);
 
-	const handleChange = e => {
-		setRegisterFormData(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
-	};
+  useEffect(() => {
+    let isUserExists;
+    if (registerFormData.username) {
+      isUserExists = setTimeout(async () => {
+        const controller = new AbortController();
+        const res = await checkUserExistence(
+          registerFormData.username,
+          controller.signal
+        );
+        if (res) setIsUsernameExists("user already exists");
+      }, 1000);
+    } else {
+      setIsUsernameExists("");
+    }
 
-	const loginUserOnRegister = async () => {
-		const res = await login({
-			email: registerFormData.email,
-			password: registerFormData.password,
-			confirmPassword: registerFormData.password,
-		});
-		handleAuthData(res);
-	};
+    return () => {
+      clearTimeout(isUserExists);
+    };
+  }, [registerFormData.username]);
 
-	const registerUser = async signal => {
-		const res = await register(registerFormData, signal);
-		if (res) {
-			const isEmailSend = await sendUserVerifyEmail(res?._id, res?.email, signal);
-			if (isEmailSend) await loginUserOnRegister();
-			navigate("/");
-		}
-	};
+  const handleChange = (e) => {
+    setRegisterFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
-	const handleSubmit = e => {
-		e.preventDefault();
+  const loginUserOnRegister = async () => {
+    const res = await login({
+      email: registerFormData.email,
+      password: registerFormData.password,
+      confirmPassword: registerFormData.password,
+    });
+    handleAuthData(res);
+  };
 
-		const controller = new AbortController();
+  const registerUser = async (signal) => {
+    const res = await register(registerFormData, signal);
+    if (res) {
+      const isEmailSend = await sendUserVerifyEmail(
+        res?._id,
+        res?.email,
+        signal
+      );
+      if (isEmailSend) await loginUserOnRegister();
+      navigate("/");
+    }
+  };
 
-		registerUser(controller.signal);
-	};
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-	const toggleOptionalMenu = e => {
-		const optionalFieldsContainer = document.querySelector(".optional-register-fields");
+    const controller = new AbortController();
 
-		optionalFieldsContainer.classList.toggle("toggle-optional-menu");
+    registerUser(controller.signal);
+  };
 
-		e.target.classList.toggle("toggle-optional-menu-icon");
-	};
+  const toggleOptionalMenu = (e) => {
+    const optionalFieldsContainer = document.querySelector(
+      ".optional-register-fields"
+    );
 
-	return (
-		<section className="register-form-section">
-			<div className="register-form-container">
-				<div className="register-header-container">
-					<h2>Register</h2>
-				</div>
-				<form className="register-form" onSubmit={handleSubmit}>
-					<article className="required-register-container">
-						<h3>Required:</h3>
-						<div className="required-register-fields">
-							<FormInput
-								id="username"
-								className="username-form-field"
-								type="text"
-								name="username"
-								isRequired={true}
-								value={registerFormData.username}
-								onChangeHandlerFN={handleChange}
-							/>
+    optionalFieldsContainer.classList.toggle("toggle-optional-menu");
 
-							{isUsernameExists ? <p>{isUsernameExists}</p> : ""}
+    e.target.classList.toggle("toggle-optional-menu-icon");
+  };
 
-							<FormInput
-								id="name"
-								className="name-form-field"
-								type="text"
-								name="name"
-								isRequired={true}
-								value={registerFormData.name}
-								onChangeHandlerFN={handleChange}
-							/>
-							<FormInput
-								id="email"
-								className="email-form-field"
-								type="email"
-								name="email"
-								isRequired={true}
-								value={registerFormData.email}
-								onChangeHandlerFN={handleChange}
-							/>
-							<PasswordLogic dataToUse={registerFormData} handleFormData={handleChange} />
-						</div>
-					</article>
+  return (
+    <section className="register-form-section">
+      <div className="register-form-container">
+        <div className="register-header-container">
+          <h2>Sign Up</h2>
+        </div>
+        <form className="register-form" onSubmit={handleSubmit}>
+          <article className="required-register-container">
+            <h3>Required:</h3>
+            <div className="required-register-fields">
+              <FormInput
+                id="username"
+                className="username-form-field"
+                type="text"
+                name="username"
+                isRequired={true}
+                value={registerFormData.username}
+                onChangeHandlerFN={handleChange}
+              />
 
-					<article className="optional-register-container">
-						<div className="optional-header-container">
-							<h3>Optional:</h3>
-							<span className="optional-menu-icon" onClick={toggleOptionalMenu}></span>
-						</div>
+              {isUsernameExists ? <p>{isUsernameExists}</p> : ""}
 
-						<div className="optional-register-fields">
-							<FormInput
-								id="phoneNumber"
-								className="phoneNumber-form-field"
-								type="number"
-								name="phoneNumber"
-								value={registerFormData.phoneNumber}
-								onChangeHandlerFN={handleChange}
-							/>
-							<FormInput
-								id="birthday"
-								className="birthday-form-field"
-								type="date"
-								name="birthday"
-								value={registerFormData.birthday}
-								onChangeHandlerFN={handleChange}
-							/>
-						</div>
-					</article>
+              <FormInput
+                id="name"
+                className="name-form-field"
+                type="text"
+                name="name"
+                isRequired={true}
+                value={registerFormData.name}
+                onChangeHandlerFN={handleChange}
+              />
+              <FormInput
+                id="email"
+                className="email-form-field"
+                type="email"
+                name="email"
+                isRequired={true}
+                value={registerFormData.email}
+                onChangeHandlerFN={handleChange}
+              />
+              <PasswordLogic
+                dataToUse={registerFormData}
+                handleFormData={handleChange}
+              />
+            </div>
+          </article>
 
-					<Button className="register-btn" type="submit" isSecondary={false} text="Register" />
+          <article className="optional-register-container">
+            <div className="optional-header-container">
+              <h3>Optional:</h3>
+              <span
+                className="optional-menu-icon"
+                onClick={toggleOptionalMenu}
+              ></span>
+            </div>
 
-					<CustomLink
-						URL="/login"
-						text="Already have an account? Sign In"
-						custom={true}
-						className="login-link"
-					/>
-				</form>
-			</div>
-		</section>
-	);
+            <div className="optional-register-fields">
+              <FormInput
+                id="phoneNumber"
+                className="phoneNumber-form-field"
+                type="number"
+                name="phoneNumber"
+                value={registerFormData.phoneNumber}
+                onChangeHandlerFN={handleChange}
+              />
+              <FormInput
+                id="birthday"
+                className="birthday-form-field"
+                type="date"
+                name="birthday"
+                value={registerFormData.birthday}
+                onChangeHandlerFN={handleChange}
+              />
+            </div>
+          </article>
+
+          {CapsLockDetect}
+
+          <Button
+            className="register-btn"
+            type="submit"
+            isSecondary={false}
+            text="Register"
+          />
+
+          <CustomLink
+            URL="/login"
+            text="Already have an account? Sign In"
+            custom={true}
+            className="login-link"
+          />
+        </form>
+      </div>
+    </section>
+  );
 };
 
 export default Register;
