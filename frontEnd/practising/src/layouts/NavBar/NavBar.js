@@ -1,17 +1,17 @@
 import { useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
-import useLogout from "./../../hooks/useLogout";
+import useLogout from "../../hooks/useLogout";
 
-import Logo from "../Main/Logo/Logo";
-import SearchContact from "../SearchContact/SearchContact";
-import CustomLink from "./../Main/CustomLink/CustomLink";
+import CustomLink from "../../components/Main/CustomLink/CustomLink";
+import Logo from "../../components/Main/Logo/Logo";
+import SearchContact from "../../components/SearchContact/SearchContact";
 
 import defaultUserImage from "./assets/person.png";
 
+import Button from "../../components/Main/Button/Button";
 import useAuth from "../../hooks/useAuth";
 import ROLES from "../../utils/ROLES";
-import Button from "../Main/Button/Button";
 import "./NavBar.css";
 
 const NavBar = () => {

@@ -1,42 +1,42 @@
 main {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .contacts-app {
-	min-height: 100vh;
+  min-height: 100vh;
 }
 
 .contacts-list {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-	gap: 2rem;
-	padding: 2rem;
-	width: 100%;
-	list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  width: 100%;
+  list-style: none;
 }
 
 .add-contact-link {
-	background-color: #e0f7fa;
-	padding: 0;
-	border-radius: 50%;
-	width: 61px;
-	aspect-ratio: 1/1;
-	display: grid;
-	place-items: center;
-	color: #0f1b25;
-	font-weight: 600;
-	font-size: 2.3rem;
-	position: fixed;
-	bottom: 45px;
-	right: 25px;
-	z-index: 100;
+  background-color: #ff6347;
+  padding: 0;
+  border-radius: 50%;
+  width: 61px;
+  aspect-ratio: 1/1;
+  display: grid;
+  place-items: center;
+  color: #e0f7fa;
+  font-weight: 600;
+  font-size: 2.3rem;
+  position: fixed;
+  bottom: 45px;
+  right: 25px;
+  z-index: 100;
 }
 
 @media (hover: hover) {
-	.add-contact-link:hover {
-		background-color: #b2ebf2;
-	}
+  .add-contact-link:hover {
+    background-color: #d94e36;
+  }
 }

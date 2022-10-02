@@ -1,13 +1,14 @@
 PROJECT TO-DO LIST:
 
-1. fix the rendering error in the Contacts component.
+1. fix the rendering error in the Contacts component. // DONE
 2. add Pagination functionality.
 3. add ability to sign with google, facebook and twitter.
-4. make the user profile page.
-5. finish the User image feature.
-6. add the ability for user to reset password, username and etc.
-7. make the admin page.
-8. make the home page.
-9. make a news letter email subscription feature.
-10. change design and make it responsive.
-11. OPTIONAL: think of something advanced and make it premium. then integrate a payment gateway.
+4. add a resend verification email after a set amount of time if
+5. make the user profile page.
+6. finish the User image feature.
+7. add the ability for user to reset password, username and etc.
+8. make the admin page.
+9. make the home page.
+10. make a news letter email subscription feature.
+11. change design and make it responsive.
+12. OPTIONAL: think of something advanced and make it premium. then integrate a payment gateway.

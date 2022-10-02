@@ -14,7 +14,7 @@ export const generateAccessToken = (
     );
 
     return jwt.sign(payload, privateKey, {
-      expiresIn: "10s",
+      expiresIn: "1m",
       issuer: "http://localhost:2022",
       audience: "http://localhost:3000",
       algorithm: "RS256",
@@ -37,7 +37,7 @@ export const generateRefreshToken = (
     );
 
     return jwt.sign(payload, privateRefreshKey, {
-      expiresIn: "15s",
+      expiresIn: "15m",
       issuer: "http://localhost:2022",
       audience: "http://localhost:3000",
       algorithm: "RS256",

@@ -74,7 +74,7 @@ export const refreshToken = async (
 
     const authData = generateUserAuthData(payload as unknown as UserDoc);
 
-    await UserModel.findAndUpdateRefreshTokens(
+    const updated = await UserModel.findAndUpdateRefreshTokens(
       payload?._id as unknown as mongoose.Types.ObjectId,
       {
         isReplace: true,
@@ -82,6 +82,8 @@ export const refreshToken = async (
       },
       refreshToken
     );
+
+    console.log(updated);
 
     res.cookie("rtn", `${authData?.refreshToken}`, {
       httpOnly: true,

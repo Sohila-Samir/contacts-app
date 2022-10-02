@@ -44,6 +44,12 @@ const ContactForm = ({ submitFunction, dataToUse, dataDispatchFunction }) => {
 
   return (
     <>
+      <a
+        className="close-contact-form"
+        onClick={(e) => window.history.go(-1)}
+        aria-label="go back"
+        role={"link"}
+      ></a>
       <section className="form-container">
         <div className="form-header">
           <h2>Contact Form</h2>

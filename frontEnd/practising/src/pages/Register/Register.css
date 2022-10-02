@@ -1,101 +1,126 @@
 .register-form-section {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background-color: #0f1b25;
-	height: 100vh;
-	padding: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0f1b25;
+  padding: 3rem 1rem;
 }
 
 .register-form-container {
-	display: flex;
-	justify-content: center;
-	width: 100%;
-	max-width: 650px;
-	height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  max-width: 650px;
+  height: fit-content;
 }
 
-.register-header-container {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	background-color: #e0f7fa;
-	width: 100%;
-	border-radius: 20px 0 0 20px;
-}
-
-.register-header-container h2 {
-	font-size: 2rem;
-	letter-spacing: 3px;
+.register-form-container h1 {
+  display: grid;
+  place-items: center;
+  font-size: 2em;
+  padding: 3rem;
+  background-color: #e0f7fa;
+  letter-spacing: 3px;
+  border-radius: 20px 20px 0 0;
+  -webkit-border-radius: 20px 20px 0 0;
+  -moz-border-radius: 20px 20px 0 0;
+  -ms-border-radius: 20px 20px 0;
+  -o-border-radius: 20px 20px 0 0;
 }
 
 form.register-form {
-	padding: 2rem 1.5rem;
-	max-width: 400px;
-	background-color: #ffffff;
-	border-radius: 0 20px 20px 0;
-	width: 85%;
-	height: 100%;
+  padding: 2rem 1.5rem;
+  max-width: 400px;
+  background-color: #ffffff;
+  border-radius: 0 0 20px 20px;
+  width: 100%;
+  -webkit-border-radius: 0 0 20px 20px;
+  -moz-border-radius: 0 0 20px 20px;
+  -ms-border-radius: 0 0 20px 20px;
+  -o-border-radius: 0 0 20px 20px;
 }
 
-form.register-form h2 {
-	color: #0f1b25;
-	font-weight: 600;
-	letter-spacing: 3px;
-	font-size: 2rem;
-	margin-block-end: 2.5rem;
-}
-
-.register-form h3 {
-	text-align: left;
-	text-transform: uppercase;
-	margin-block-end: 1rem;
-	letter-spacing: 2px;
+.register-form h2 {
+  text-align: left;
+  text-transform: uppercase;
+  margin-block-end: 1rem;
+  letter-spacing: 2px;
+  font-size: 1.3em;
 }
 
 .optional-header-container {
-	cursor: pointer;
-	display: flex;
-	align-items: flex-start;
-	gap: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
 }
 
 .optional-register-fields {
-	height: 0;
-	overflow: hidden;
-	transition: 0.2s all ease;
+  height: 0;
+  overflow: hidden;
+  transition: 0.2s all ease;
+  -webkit-transition: 0.2s all ease;
+  -moz-transition: 0.2s all ease;
+  -ms-transition: 0.2s all ease;
+  -o-transition: 0.2s all ease;
 }
 
 span.optional-menu-icon {
-	background-image: url("./assets/expand-icon.png");
-	background-repeat: no-repeat;
-	background-size: cover;
-	width: 20px;
-	height: 20px;
-	transition: 0.2s all ease;
+  background-image: url("./assets/expand-icon.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 20px;
+  height: 20px;
+  transition: 0.2s all ease;
+  -webkit-transition: 0.2s all ease;
+  -moz-transition: 0.2s all ease;
+  -ms-transition: 0.2s all ease;
+  -o-transition: 0.2s all ease;
 }
 
 .toggle-optional-menu-icon {
-	transform: rotate(180deg);
-	-webkit-transform: rotate(180deg);
-	-moz-transform: rotate(180deg);
-	-ms-transform: rotate(180deg);
-	-o-transform: rotate(180deg);
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
 }
 
 .optional-register-fields.toggle-optional-menu {
-	height: 200px;
+  height: 200px;
 }
 
 .register-btn {
-	width: 100%;
-	margin-block-start: 0.5rem;
+  width: 100%;
+  margin-block-start: 0.5rem;
 }
 
 a.Link.login-link {
-	padding: 0;
-	margin-block-start: 2rem;
-	display: inline-block;
-	font-size: 0.9rem;
-	color: gray;
+  padding: 0;
+  margin-block-start: 2rem;
+  display: inline-block;
+  font-size: 0.9rem;
+  color: gray;
+  text-align: center;
+}
+
+@media screen and (min-width: 765px) {
+  .register-form-container {
+    flex-direction: row;
+  }
+  .register-form-container h1 {
+    border-radius: 20px 0 0 20px;
+    -webkit-border-radius: 20px 0 0 20px;
+    -moz-border-radius: 20px 0 0 20px;
+    -ms-border-radius: 20px 0 0 20px;
+    -o-border-radius: 20px 0 0 20px;
+  }
+  form.register-form {
+    border-radius: 0 20px 20px 0;
+    -webkit-border-radius: 0 20px 20px 0;
+    -moz-border-radius: 0 20px 20px 0;
+    -ms-border-radius: 0 20px 20px 0;
+    -o-border-radius: 0 20px 20px 0;
+  }
 }

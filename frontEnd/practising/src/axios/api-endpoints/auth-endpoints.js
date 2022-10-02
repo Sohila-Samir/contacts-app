@@ -18,8 +18,8 @@ export const login = async (data, signal) => {
 export const register = async (data, signal) => {
   try {
     const res = await authInstance.post(`${api}users/new`, data, { signal });
-    console.log(res.data.data);
-    return res.data.data;
+    console.log(res.data);
+    return res.data;
   } catch (err) {
     if (!err.response.data.success) return err.response.data;
     console.log("register fetch error: ", err.response);
@@ -30,8 +30,11 @@ export const register = async (data, signal) => {
 export const refreshToken = async (signal) => {
   try {
     const res = await authInstance.post(`/refresh-token`, null, { signal });
-    console.log(res.data.data);
-    return res.data.data;
+    console.log(
+      "%crquesting new access token...",
+      "background-color: yellow; color: black;"
+    );
+    return res.data;
   } catch (err) {
     if (!err.response.data.success) return err.response.data;
     console.log("refresh token fetch error: ", err.response);

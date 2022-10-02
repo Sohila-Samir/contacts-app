@@ -90,7 +90,7 @@ const Login = () => {
 
     const trustDeviceBtn = document.querySelector(".trustDevice");
 
-    if (res.data.accessToken) {
+    if (res?.data?.accessToken) {
       trustDeviceBtn.checked
         ? localStorage.setItem("persist", "$persistCode@74123698")
         : localStorage.removeItem("persist");

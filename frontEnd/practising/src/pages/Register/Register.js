@@ -111,12 +111,10 @@ const Register = () => {
   return (
     <section className="register-form-section">
       <div className="register-form-container">
-        <div className="register-header-container">
-          <h2>Sign Up</h2>
-        </div>
+        <h1>Sign Up</h1>
         <form className="register-form" onSubmit={handleSubmit}>
           <article className="required-register-container">
-            <h3>Required:</h3>
+            <h2>Required:</h2>
             <div className="required-register-fields">
               <FormInput
                 id="username"
@@ -157,7 +155,7 @@ const Register = () => {
 
           <article className="optional-register-container">
             <div className="optional-header-container">
-              <h3>Optional:</h3>
+              <h2>Optional:</h2>
               <span
                 className="optional-menu-icon"
                 onClick={toggleOptionalMenu}

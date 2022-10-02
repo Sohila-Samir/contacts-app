@@ -1,65 +1,91 @@
 import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import jwtDecode from "jwt-decode";
 import privateInstance from "../axios/instances/private-instance";
 import useAuth from "./useAuth";
 import useRefreshToken from "./useRefreshToken";
 
 const usePrivateInstance = () => {
-	const { authData } = useAuth();
-	const refresh = useRefreshToken();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-	const refreshAndAttachHeader = async config => {
-		try {
-			const newAuthData = await refresh();
-			config.headers["Authorization"] = `bearer ${newAuthData?.accessToken}`;
-			return config;
-		} catch (err) {
-			console.log("refresh error: ", err);
-		}
-	};
+  const { authData } = useAuth();
+  const refresh = useRefreshToken();
 
-	useEffect(() => {
-		const requestInterceptor = privateInstance.interceptors.request.use(
-			async config => {
-				if (!authData?.accessToken) {
-					await refreshAndAttachHeader(config);
+  useEffect(() => {
+    // request interceptor
+    const requestInterceptor = privateInstance.interceptors.request.use(
+      async (config) => {
+        if (!config.headers["Authorization"] && authData?.accessToken) {
+          console.log("request header has been set!");
 
-					return config;
-				}
-				const decoded = jwtDecode(authData?.accessToken);
+          config.headers["Authorization"] = `bearer ${authData?.accessToken}`;
 
-				const currentDate = new Date();
+          console.log("request header: ", config.headers["Authorization"]);
+        }
+        return config;
+      },
+      (err) => {
+        Promise.reject(err).catch((err) =>
+          console.log("request interceptor error: ", err)
+        );
+      }
+    );
 
-				if (currentDate >= decoded?.exp * 1000) {
-					await refreshAndAttachHeader(config);
+    // response interceptor
+    const responseInterceptor = privateInstance.interceptors.response.use(
+      (config) => config,
+      async (err) => {
+        const prevRequest = err?.config;
 
-					return config;
-				}
+        if (err?.response?.status === 403 && !prevRequest?.sent) {
+          console.log(
+            "expired access token! - resending request one more time..."
+          );
 
-				config.headers["Authorization"] = `bearer ${authData?.accessToken}`;
-				return config;
-			},
-			err => {
-				Promise.reject(err).catch(err => console.log(err));
-			}
-		);
+          prevRequest.sent = true;
 
-		return () => {
-			privateInstance.interceptors.request.eject(requestInterceptor);
-		};
-	}, [authData?.user, authData?.accessToken]);
+          const newAuthData = await refresh();
 
-	return privateInstance;
+          console.log("new auth data: ", newAuthData);
+
+          if (newAuthData?.data?.accessToken) {
+            console.log("condition ran successfully");
+
+            prevRequest.headers[
+              "Authorization"
+            ] = `bearer ${newAuthData.data.accessToken}`;
+
+            console.log(
+              "new header token has been set: ",
+              prevRequest.headers["Authorization"]
+            );
+
+            return privateInstance(prevRequest);
+          }
+        }
+        Promise.reject(err).catch((err) =>
+          console.log("response interceptor error: ", err)
+        );
+      }
+    );
+
+    return () => {
+      privateInstance.interceptors.request.eject(requestInterceptor);
+      privateInstance.interceptors.response.eject(responseInterceptor);
+    };
+  }, [authData?.accessToken, location, navigate]);
+
+  return privateInstance;
 };
 
 export default usePrivateInstance;
 
-// { request interceptor scenearios }
+// { request interceptor scenarios }
 // ------------------------------------
 // user logs in :
 //    - upon successful log in, set the auth data to the returned data from the response
-//    - set the user id in local storage for persistent logginh mechanism
+//    - set the user id in local storage for persistent logging mechanism
 //    * upon failure //TODO
 
 // user access a protected route:

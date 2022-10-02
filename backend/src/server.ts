@@ -9,6 +9,7 @@ import { Application, Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
+import morgan from "morgan";
 import multer from "multer";
 import path from "path";
 
@@ -47,6 +48,7 @@ app.use(express.static(path.join(__dirname, "../src/views")));
 app.use(express.static(path.join(__dirname, "../src/public")));
 
 // middlewares
+app.use(morgan("dev"));
 app.use(
   cors({
     origin: "http://localhost:3000",

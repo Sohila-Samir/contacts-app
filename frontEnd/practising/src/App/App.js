@@ -1,33 +1,29 @@
 import { disableReactDevTools } from "@fvilers/disable-react-devtools";
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import { ContactFormProvider } from "../Contexts/ContactFormContext";
 
-import AuthRole from "../components/AuthRole/AuthRole";
-import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
+import AuthRole from "../layouts/AuthRole/AuthRole";
+import ProtectedRoute from "../layouts/ProtectedRoute/ProtectedRoute";
 import LoadingPage from "../pages/LoadingPage/LoadingPage";
 import UnAuthorized from "./../pages/errors/UnAuthorized/UnAuthorized";
 
-import { getContacts } from "../axios/api-endpoints/Contact-endpoints";
-import useAuth from "../hooks/useAuth";
-import useContacts from "../hooks/useContacts";
-import usePrivateInstance from "../hooks/usePrivateInstance";
 import ROLES from "./../utils/ROLES";
 
 import "./App.css";
 
 const Home = lazy(() => import("./../pages/Home/Home"));
 const NotFound = lazy(() => import("../pages/errors/NotFound/NotFound"));
-const AddContact = lazy(() => import("./../components/AddContact/AddContact"));
+const AddContact = lazy(() => import("./../pages/AddContact/AddContact"));
 const UpdateContact = lazy(() =>
-  import("./../components/UpdateContact/UpdateContact")
+  import("./../pages/UpdateContact/UpdateContact")
 );
 const Contacts = lazy(() => import("../pages/Contacts/Contacts"));
 const ForgotPassword = lazy(() =>
   import("../components/ForgotPassword/ForgotPassword")
 );
-const SharedLayout = lazy(() => import("../pages/SharedLayout/SharedLayout"));
+const SharedLayout = lazy(() => import("../layouts/SharedLayout/SharedLayout"));
 const ContactDetails = lazy(() =>
   import("./../pages/ContactDetails/ContactDetails")
 );
@@ -43,30 +39,6 @@ if (process.env.NODE_ENV === "production") {
 }
 
 function App() {
-  const { authData } = useAuth();
-  const privateInstance = usePrivateInstance();
-  const { dispatch } = useContacts();
-
-  const fetchContacts = async (signal) => {
-    const res = await getContacts(privateInstance, signal);
-    if (res) {
-      dispatch({ type: "SET_CONTACTS", payload: res });
-    }
-  };
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    if (authData?.accessToken) {
-      fetchContacts(controller.signal);
-    }
-
-    return () => {
-      controller.abort();
-    };
-  }, [authData?.accessToken]);
-
-  console.log("App re-rendered");
   return (
     <Suspense fallback={<LoadingPage />}>
       <div className="App">
@@ -106,7 +78,6 @@ function App() {
               <Route path="/unauthorized" exact element={<UnAuthorized />} />
             </Route>
           </Route>
-
           <Route path="/login" exact element={<Login />} />
 
           <Route path="/register" exact element={<Register />} />
@@ -118,8 +89,9 @@ function App() {
             exact
             element={<ResetPasswordForm />}
           />
-
-          <Route path="*" element={<NotFound />} />
+          <Route element={<SharedLayout />}>
+            <Route path="*" element={<NotFound />} />
+          </Route>
         </Routes>
       </div>
     </Suspense>
