@@ -1,40 +1,40 @@
 .btn {
-	padding: 0.7rem 2rem;
-	text-decoration: none;
-	font-size: 1rem;
-	color: var(--main-text-color);
-	background-color: transparent;
-	cursor: pointer;
-	outline: none;
-	border: 1px solid transparent;
-	border-radius: 20px;
-	transition: all 0.2s ease;
-	-webkit-border-radius: 20px;
-	-moz-border-radius: 20px;
-	-ms-border-radius: 20px;
-	-o-border-radius: 20px;
+  display: grid;
+  place-content: center;
+  width: 100%;
+  max-width: 110px;
+  padding: 0.7rem 2rem;
+  text-decoration: none;
+  font-size: 1rem;
+  color: var(--main-text-color);
+  background-color: transparent;
+  cursor: pointer;
+  outline: none;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  transition: all 0.2s ease;
 }
 
 .main {
-	font-weight: 600;
-	color: #ffffff;
-	background-color: #0e192b;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #0e192b;
 }
 
 .secondary {
-	background-color: transparent;
-	border-color: #0e192b;
-	color: #0e192b;
+  background-color: transparent;
+  border-color: #0e192b;
+  color: #0e192b;
 }
 
 @media (hover: hover) {
-	.main:hover {
-		background-color: transparent;
-		border-color: #0e192b;
-		color: #0e192b;
-	}
-	.secondary:hover {
-		background-color: #0e192b;
-		color: #ffffff;
-	}
+  .main:hover {
+    background-color: transparent;
+    border-color: #0e192b;
+    color: #0e192b;
+  }
+  .secondary:hover {
+    background-color: #0e192b;
+    color: #ffffff;
+  }
 }

@@ -1,5 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
+import useAuth from "../../hooks/useAuth";
+
 import ContactForm from "../../components/ContactForm/ContactForm";
 import NotFound from "../errors/NotFound/NotFound";
 
@@ -16,6 +19,8 @@ const UpdateContact = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  const { authData } = useAuth;
+
   const privateInstance = usePrivateInstance();
   const { formData, dispatch } = useContext(ContactFormContext);
 
@@ -29,11 +34,18 @@ const UpdateContact = () => {
     requestContact();
   }, []);
 
+  useEffect(() => {
+    if (authData?.user !== formData.userID) {
+      navigate("/unauthorized", { replace: true });
+      console.log("condition ran");
+    }
+  }, []);
+
   const submitFunction = async (privateInstance, signal, submitData) => {
     const res = await updateContact(privateInstance, submitData, signal);
 
     if (res) {
-      navigate("/contacts");
+      navigate("/contacts/pages/1");
     }
   };
 

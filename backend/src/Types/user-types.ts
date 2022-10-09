@@ -1,5 +1,5 @@
 import mongoose, { Model } from "mongoose";
-import { SchemaRole } from "./role-type";
+import { SchemaRole } from "./roles-types";
 
 export type UserDoc = {
   _id: mongoose.Types.ObjectId;

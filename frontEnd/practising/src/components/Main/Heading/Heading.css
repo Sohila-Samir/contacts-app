@@ -1,8 +1,10 @@
 .heading {
-	margin: 2rem;
-	margin-top: 0;
-	padding-bottom: 0.5em;
-	color: #0f1b25;
-	border-bottom: 4px dotted;
-	letter-spacing: 2px;
+  margin: 2rem;
+  margin-block-start: 0;
+  padding-bottom: 0.5em;
+  color: #0f1b25;
+  border-bottom: 4px dotted;
+  letter-spacing: 2px;
+  width: fit-content;
+  margin-inline: auto;
 }

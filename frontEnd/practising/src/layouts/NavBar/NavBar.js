@@ -59,7 +59,7 @@ const NavBar = () => {
                 className={(isActive) =>
                   isActive ? "navLink active" : "navLink"
                 }
-                to="/contacts"
+                to="/contacts/pages/1"
               >
                 Contacts
               </NavLink>

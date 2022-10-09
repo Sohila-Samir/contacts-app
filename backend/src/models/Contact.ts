@@ -1,9 +1,11 @@
 import mongoose, { Schema } from "mongoose";
 import ExpressError from "../utils/main/ExpressError";
-import * as contactsPermissions from "./../permessions/contacts";
 
-import { ContactType, PhoneInputType } from "../Types/contact-types";
-import { SchemaRole } from "../Types/role-type";
+import {
+  ContactIndexReturnType,
+  ContactType,
+  PhoneInputType,
+} from "../Types/contact-types";
 import { UserDoc } from "../Types/user-types";
 import { UserModel } from "./User";
 
@@ -46,17 +48,54 @@ const contactsSchema = new Schema({
   userID: {
     type: Schema.Types.ObjectId,
     ref: "User",
+    selected: true,
   },
 });
 
 export const ContactsModel = mongoose.model("Contact", contactsSchema);
 
 export class Contact {
-  async index(): Promise<ContactType[] | undefined> {
+  async adminIndex(
+    page: number,
+    limit: number
+  ): Promise<ContactIndexReturnType | undefined> {
     try {
-      const all: ContactType[] = await ContactsModel.find({});
-      return all;
+      const totalDocs = await ContactsModel.countDocuments();
+
+      const pages = Math.ceil(totalDocs / (limit as number));
+
+      const docsToSkip: number = page * limit - limit;
+
+      const contacts: ContactType[] = await ContactsModel.find({})
+        .skip(docsToSkip)
+        .limit(limit);
+
+      return { contacts, pages };
     } catch (err: unknown) {
+      if (err instanceof (ExpressError || Error)) {
+        throw new ExpressError(err.message, err.status || 400, err.name);
+      }
+    }
+  }
+
+  async userIndex(
+    userID: string,
+    page: number,
+    limit: number
+  ): Promise<ContactIndexReturnType | undefined> {
+    try {
+      const totalDocs = await ContactsModel.find({ userID }).countDocuments();
+
+      const pages = Math.ceil(totalDocs / (limit as number));
+
+      const docsToSkip: number = page * limit - limit;
+
+      const contacts: ContactType[] = await ContactsModel.find({ userID })
+        .skip(docsToSkip)
+        .limit(limit);
+
+      return { contacts, pages };
+    } catch (err) {
       if (err instanceof (ExpressError || Error)) {
         throw new ExpressError(err.message, err.status || 400, err.name);
       }
@@ -75,22 +114,14 @@ export class Contact {
   }
 
   async delete(
-    id: string,
-    userID: string,
-    userRoles: SchemaRole
+    id: string
   ): Promise<mongoose.Types.ObjectId | null | undefined> {
     try {
-      const contact = (await ContactsModel.findById(id)) as ContactType;
+      const deletedContactID = await ContactsModel.findByIdAndDelete({
+        _id: id,
+      });
 
-      const isCanDeleteContact = contactsPermissions.canDeleteContact(
-        contact,
-        userID,
-        userRoles
-      );
-
-      await ContactsModel.deleteOne({ _id: id });
-
-      return isCanDeleteContact;
+      return deletedContactID?._id;
     } catch (err: unknown) {
       if (err instanceof (ExpressError || Error)) {
         throw new ExpressError(err.message, err.status || 400, err.name);
@@ -98,7 +129,7 @@ export class Contact {
     }
   }
 
-  async create(
+  async addContact(
     contact: ContactType,
     userID: string
   ): Promise<ContactType | undefined> {
@@ -109,11 +140,9 @@ export class Contact {
 
       contact.userID = user as unknown as mongoose.Types.ObjectId;
 
-      let newContact: ContactType = (
-        await ContactsModel.create(contact)
-      ).depopulate("userID");
-
-      return newContact;
+      return (await ContactsModel.create(contact)).depopulate(
+        "userID"
+      ) as ContactType;
     } catch (err: unknown) {
       if (err instanceof (ExpressError || Error)) {
         throw new ExpressError(err.message, err.status || 400, err.name);
@@ -123,18 +152,14 @@ export class Contact {
 
   async update(
     contactID: string,
-    newData: ContactType,
-    userID: string
+    newData: ContactType
   ): Promise<ContactType | undefined | null> {
     try {
-      const contact = (await ContactsModel.findById(contactID)) as ContactType;
-
-      contactsPermissions.canUpdateContact(contact, userID);
-
       const updatedContact: ContactType | null =
         await ContactsModel.findByIdAndUpdate(contactID, newData, {
           new: true,
         });
+
       return updatedContact;
     } catch (err: unknown) {
       if (err instanceof (ExpressError || Error)) {
