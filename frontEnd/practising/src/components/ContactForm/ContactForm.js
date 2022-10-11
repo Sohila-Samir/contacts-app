@@ -67,7 +67,7 @@ const ContactForm = ({ submitFunction, dataToUse, dataDispatchFunction }) => {
               className="name-input-field"
               type="text"
               name="name"
-              value={dataToUse?.name}
+              value={dataToUse?.name || ""}
               onChangeHandlerFN={handleInputChange}
               isRequired={true}
             />
@@ -77,7 +77,7 @@ const ContactForm = ({ submitFunction, dataToUse, dataDispatchFunction }) => {
               className="handle-input-field"
               type="text"
               name="handle"
-              value={dataToUse?.handle}
+              value={dataToUse?.handle || ""}
               onChangeHandlerFN={handleInputChange}
               isRequired={true}
             />
@@ -171,7 +171,7 @@ const ContactForm = ({ submitFunction, dataToUse, dataDispatchFunction }) => {
                 className="email-input-field"
                 type="email"
                 name="email"
-                value={dataToUse?.email}
+                value={dataToUse?.email || ""}
                 onChangeHandlerFN={handleInputChange}
               />
 
@@ -180,7 +180,7 @@ const ContactForm = ({ submitFunction, dataToUse, dataDispatchFunction }) => {
                 className="address-input-field"
                 type="text"
                 name="address"
-                value={dataToUse?.address}
+                value={dataToUse?.address || ""}
                 onChangeHandlerFN={handleInputChange}
               />
             </div>

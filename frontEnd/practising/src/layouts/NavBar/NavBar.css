@@ -1,4 +1,4 @@
-nav {
+.navbar {
   background-color: #0f1b25;
   display: flex;
   justify-content: space-evenly;
@@ -8,7 +8,7 @@ nav {
   margin-bottom: 4rem;
 }
 
-nav .nav-div-1 {
+.navbar .nav-div-1 {
   background-color: #0f1b25;
   display: flex;
   justify-content: center;
@@ -38,7 +38,7 @@ nav .nav-div-1 {
   background-color: #e0f7fa;
 }
 
-nav .nav-div-2 {
+.navbar .nav-div-2 {
   width: 100%;
   height: 100%;
   background-color: #0f1b25;
@@ -102,17 +102,17 @@ img.user-profile-img {
 }
 
 @media screen and (max-width: 768px) {
-  nav {
+  .navbar {
     display: contents;
   }
 
-  nav .nav-div-1 {
+  .navbar .nav-div-1 {
     flex-direction: column;
     align-items: flex-start;
     padding: 1rem 0.8rem;
   }
 
-  nav .nav-div-2 {
+  .navbar .nav-div-2 {
     margin-bottom: 4rem;
     padding: 0.8rem;
   }

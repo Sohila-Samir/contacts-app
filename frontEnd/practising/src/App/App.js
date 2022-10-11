@@ -29,7 +29,12 @@ const ContactDetails = lazy(() =>
 );
 const Login = lazy(() => import("./../pages/Login/Login"));
 const Register = lazy(() => import("./../pages/Register/Register"));
-const Admin = lazy(() => import("./../pages/Admin/Admin"));
+const AdminContactsIndex = lazy(() =>
+  import("./../pages/Admin/AdminContactsIndex/AdminContactsIndex")
+);
+const AdminDashBoard = lazy(() =>
+  import("./../pages/Admin/AdminDashBoard/AdminDashBoard")
+);
 const ResetPasswordForm = lazy(() =>
   import("./../pages/ResetPasswordForm/ResetPasswordForm")
 );
@@ -48,7 +53,7 @@ function App() {
 
             <Route element={<ProtectedRoute />}>
               <Route element={<AuthRole roles={[ROLES.USER, ROLES.ADMIN]} />}>
-                <Route path="/contacts" element={<Contacts />} />
+                <Route path="/contacts/pages/:pageNum" element={<Contacts />} />
 
                 <Route
                   path="/contacts/new"
@@ -72,7 +77,16 @@ function App() {
               </Route>
 
               <Route element={<AuthRole roles={[ROLES.ADMIN]} />}>
-                <Route path="/admin/dashboard" exact element={<Admin />} />
+                <Route
+                  index
+                  path="/admin/dashboard"
+                  element={<AdminDashBoard />}
+                />
+                <Route
+                  path="/admin/dashboard/contacts/pages/:pageNum"
+                  exact
+                  element={<AdminContactsIndex />}
+                />
               </Route>
 
               <Route path="/unauthorized" exact element={<UnAuthorized />} />

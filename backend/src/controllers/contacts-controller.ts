@@ -1,108 +1,145 @@
 import mongoose from "mongoose";
 
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import { Contact } from "../models/Contact";
-import { ContactType } from "../Types/contact-types";
+import { ContactIndexReturnType, ContactType } from "../Types/contact-types";
 
+import ExpressError from "../utils/main/ExpressError";
 import * as contactsPermissions from "./../permessions/contacts";
 
 const contact = new Contact();
 
-export const getAllContacts = async (
-	_req: Request,
-	res: Response,
-	next: NextFunction
+export const getAdminIndex = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
-	try {
-		const all = await contact.index();
+  try {
+    const { page, limit } = req.query;
 
-		const dataToSend = contactsPermissions.getScopedContacts(
-			all as ContactType[],
-			res.locals.user.roles,
-			res.locals.user._id
-		);
+    const { contacts, pages } = (await contact.adminIndex(
+      Number(page) || 1,
+      Number(limit) || 15
+    )) as ContactIndexReturnType;
 
-		res.status(200).json({ success: true, data: dataToSend });
-	} catch (err) {
-		next(err);
-	}
+    if (Number(page) > pages) throw new ExpressError("Page Not found!", 404);
+    console.log("requested reached sending data phase");
+
+    res.status(200).json({ success: true, data: { contacts, pages } });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getUserIndex = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { page, limit } = req.query;
+    const authUser = res.locals.user;
+
+    const { contacts, pages } = (await contact.userIndex(
+      authUser._id,
+      Number(page) || 1,
+      Number(limit) || 15
+    )) as ContactIndexReturnType;
+
+    if (Number(page) > pages) throw new ExpressError("Page Not found!", 404);
+
+    res.status(200).json({ success: true, data: { contacts, pages } });
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const getContact = async (
-	req: Request,
-	res: Response,
-	next: NextFunction
+  req: Request,
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
-	try {
-		const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-		const authenticatedUser = res.locals.user;
+    const foundContact = (await contact.getSingleContact(id)) as ContactType;
 
-		const foundContact = (await contact.getSingleContact(id)) as ContactType;
+    const authorizedContact = contactsPermissions.canViewContact(
+      foundContact,
+      res.locals.user._id,
+      res.locals.user.roles
+    );
 
-		const authorizedContact = contactsPermissions.canViewContact(
-			foundContact,
-			authenticatedUser._id,
-			authenticatedUser.roles
-		);
-
-		res.status(201).json({ success: true, data: authorizedContact });
-	} catch (err) {
-		next(err);
-	}
+    res.status(201).json({ success: true, data: authorizedContact });
+  } catch (err) {
+    next(err);
+  }
 };
 
-export const addContact = async (
-	req: Request,
-	res: Response,
-	next: NextFunction
+export const newContact = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
-	try {
-		const newContact = await contact.create(req.body, res.locals.user._id);
+  try {
+    const newContact = await contact.addContact(req.body, res.locals.user._id);
 
-		res.status(201).json({ success: true, data: newContact });
-	} catch (err) {
-		next(err);
-	}
+    if (newContact) {
+      res.status(201).json({ success: true, data: newContact });
+      return;
+    }
+    throw new ExpressError("something went wrong...!", 400);
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const deleteContact = async (
-	req: Request,
-	res: Response,
-	next: NextFunction
+  req: Request,
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
-	try {
-		const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-		const authenticatedUser = res.locals.user;
+    const isDeleteContact = await contactsPermissions.canDeleteContact(
+      id,
+      res.locals.user._id,
+      res.locals.user.roles
+    );
 
-		const deletedContactId = (await contact.delete(
-			id,
-			authenticatedUser._id,
-			authenticatedUser.roles
-		)) as mongoose.Types.ObjectId;
-
-		res.status(200).json({ success: true, data: deletedContactId });
-	} catch (err) {
-		next(err);
-	}
+    if (isDeleteContact) {
+      const deletedContactId = (await contact.delete(
+        id
+      )) as mongoose.Types.ObjectId;
+      res.status(200).json({ success: true, data: deletedContactId });
+    }
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const updateContact = async (
-	req: Request,
-	res: Response,
-	next: NextFunction
+  req: Request,
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
-	try {
-		const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-		const updatedContact = await contact.update(id, req.body, res.locals.user._id);
+    const isUpdate = await contactsPermissions.canUpdateContact(
+      res.locals.user._id,
+      id
+    );
 
-		res.status(200).json({
-			success: true,
-			data: updatedContact,
-		});
-	} catch (err) {
-		next(err);
-	}
+    if (isUpdate) {
+      const updatedContact = await contact.update(id, req.body);
+      res.status(200).json({
+        success: true,
+        data: updatedContact,
+      });
+    }
+  } catch (err) {
+    next(err);
+  }
 };

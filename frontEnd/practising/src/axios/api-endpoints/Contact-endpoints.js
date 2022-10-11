@@ -1,12 +1,17 @@
 const contactsApi = "/contacts";
 
-export const getContacts = async (instance) => {
+export const getUserContacts = async (instance, page, limit) => {
   try {
-    const res = await instance.get(`${contactsApi}`);
-    console.log("%crequesting contacts...", "color: yellow;");
+    const res = await instance.get(`${contactsApi}/index/user`, {
+      params: {
+        page,
+        limit,
+      },
+    });
+    console.log("%crequesting user contacts...", "color: yellow;");
     return res?.data?.data;
   } catch (err) {
-    console.log("contacts fetch error:", err.message);
+    console.log("user contacts fetch error:", err.message);
   }
 };
 

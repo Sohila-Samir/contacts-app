@@ -37,5 +37,5 @@ const generateRefreshTknPairs = () => {
   fs.writeFileSync(__dirname + "/PRV_KEY_REFRESH.pem", keyPairs.privateKey);
 };
 
-generateAccessTknPairs();
-generateRefreshTknPairs();
+// generateAccessTknPairs();
+// generateRefreshTknPairs();

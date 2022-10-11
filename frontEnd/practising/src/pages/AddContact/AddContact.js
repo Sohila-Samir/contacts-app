@@ -20,7 +20,7 @@ const AddContact = () => {
 
         dispatch({ type: "RESET" });
 
-        navigate("/contacts");
+        navigate("/contacts/pages/1");
       }
     }
   };

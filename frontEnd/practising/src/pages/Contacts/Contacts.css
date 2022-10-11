@@ -19,7 +19,7 @@ main {
 }
 
 .add-contact-link {
-  background-color: #ff6347;
+  background-color: #4682b4;
   padding: 0;
   border-radius: 50%;
   width: 61px;
@@ -37,6 +37,6 @@ main {
 
 @media (hover: hover) {
   .add-contact-link:hover {
-    background-color: #d94e36;
+    background-color: #2f6997;
   }
 }

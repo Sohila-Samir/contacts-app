@@ -31,7 +31,7 @@ const NavBar = () => {
   };
 
   return (
-    <nav>
+    <nav className="navbar">
       <div className="nav-div-1">
         <div className="nav-header">
           <Logo />
@@ -59,7 +59,7 @@ const NavBar = () => {
                 className={(isActive) =>
                   isActive ? "navLink active" : "navLink"
                 }
-                to="/contacts"
+                to="/contacts/pages/1"
               >
                 Contacts
               </NavLink>

@@ -1,6 +1,6 @@
 import express, { IRouter } from "express";
 
-import verifyUser from "../middlewares/verifyUser";
+import verifyUser from "../middlewares/auth/verifyUser";
 import * as authHandleFunctions from "./../controllers/auth-controller";
 
 const router: IRouter = express.Router();
