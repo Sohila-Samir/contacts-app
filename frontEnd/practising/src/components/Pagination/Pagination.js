@@ -49,7 +49,7 @@ const Pagination = ({
       <ul className="pagination__list">
         {paginationRange.map((pageNum, idx) =>
           pageNum === DOTS ? (
-            <li key={`key__dot__${idx}`} className="pagination__dot">
+            <li key={`key__dot__${idx}`} className="pagination__dots">
               &#8230;
             </li>
           ) : (
