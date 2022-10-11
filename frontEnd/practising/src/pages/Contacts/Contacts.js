@@ -18,8 +18,8 @@ import "./Contacts.css";
 const Contacts = () => {
   const { pageNum } = useParams();
 
-  const [limit] = useState(10);
-  const [pages, setPages] = useState(1);
+  const [limit] = useState(4);
+  const [numberOfPages, setNumberOfPages] = useState(1);
   const [error, setError] = useState();
 
   const privateInstance = usePrivateInstance();
@@ -27,17 +27,19 @@ const Contacts = () => {
 
   const currentPage = Number(pageNum) || 1;
   const route = "/contacts/pages/";
+
   useEffect(() => {
     const fetchContacts = async () => {
-      const { contacts, pages: numberOfPages } = await getUserContacts(
+      const { contacts, pages } = await getUserContacts(
         privateInstance,
         currentPage,
         limit
       );
 
-      if (currentPage > numberOfPages) return setError("page not found!");
+      if (currentPage > pages) return setError("page not found!");
 
-      setPages(numberOfPages);
+      setNumberOfPages(pages);
+
       dispatch({ type: "SET_CONTACTS", payload: contacts });
     };
 
@@ -54,7 +56,11 @@ const Contacts = () => {
         <>
           <Heading text="Your Contacts" />
 
-          <Pagination pages={pages} currentPage={currentPage} route={route} />
+          <Pagination
+            numberOfPages={numberOfPages}
+            currentPage={currentPage}
+            route={route}
+          />
 
           <ol className="contacts-list">
             {contacts?.map((contact) => (
@@ -62,7 +68,11 @@ const Contacts = () => {
             ))}
           </ol>
 
-          <Pagination pages={pages} currentPage={currentPage} route={route} />
+          <Pagination
+            numberOfPages={numberOfPages}
+            currentPage={currentPage}
+            route={route}
+          />
         </>
       )}
 

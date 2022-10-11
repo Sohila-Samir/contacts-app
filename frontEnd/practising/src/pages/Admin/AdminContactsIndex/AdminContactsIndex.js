@@ -19,8 +19,8 @@ const AdminContactsIndex = () => {
   const privateInstance = usePrivateInstance();
 
   const [adminContacts, setAdminContacts] = useState([]);
-  const [pages, setPages] = useState(1);
-  const [limit] = useState(2);
+  const [numberOfPages, setNumberOfPages] = useState(1);
+  const [limit] = useState(4);
   const [error, setError] = useState(1);
 
   const route = "/admin/dashboard/contacts/pages/";
@@ -28,17 +28,17 @@ const AdminContactsIndex = () => {
 
   useEffect(() => {
     const requestContactsPage = async () => {
-      const { contacts, pages: numberOfPages } = await getAdminContacts(
+      const { contacts, pages } = await getAdminContacts(
         privateInstance,
         currentPage,
         limit
       );
 
-      if (currentPage > numberOfPages) {
+      if (currentPage > pages) {
         return setError("page not found!");
       }
 
-      setPages(numberOfPages);
+      setNumberOfPages(pages);
       setAdminContacts(contacts);
       setError("");
     };
@@ -53,7 +53,11 @@ const AdminContactsIndex = () => {
       ) : adminContacts?.length ? (
         <>
           <Heading text={"All App Contacts"} />
-          <Pagination pages={pages} currentPage={currentPage} route={route} />
+          <Pagination
+            numberOfPages={numberOfPages}
+            currentPage={currentPage}
+            route={route}
+          />
 
           <ol className="contacts-list">
             {adminContacts?.map((contact) => (
@@ -61,7 +65,11 @@ const AdminContactsIndex = () => {
             ))}
           </ol>
 
-          <Pagination pages={pages} currentPage={currentPage} route={route} />
+          <Pagination
+            numberOfPages={numberOfPages}
+            currentPage={currentPage}
+            route={route}
+          />
         </>
       ) : (
         <NoContacts />

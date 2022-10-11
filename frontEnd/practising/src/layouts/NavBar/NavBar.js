@@ -31,7 +31,7 @@ const NavBar = () => {
   };
 
   return (
-    <nav>
+    <nav className="nav-bar">
       <div className="nav-div-1">
         <div className="nav-header">
           <Logo />
