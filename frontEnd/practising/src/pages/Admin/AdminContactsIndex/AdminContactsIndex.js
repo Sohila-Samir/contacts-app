@@ -19,7 +19,7 @@ const AdminContactsIndex = () => {
   const privateInstance = usePrivateInstance();
 
   const [adminContacts, setAdminContacts] = useState([]);
-  const [pages, setPages] = useState(1);
+  const [numberOfPages, setNumberOfPages] = useState(1);
   const [limit] = useState(2);
   const [error, setError] = useState(1);
 
@@ -38,7 +38,7 @@ const AdminContactsIndex = () => {
         return setError("page not found!");
       }
 
-      setPages(numberOfPages);
+      setNumberOfPages(numberOfPages);
       setAdminContacts(contacts);
       setError("");
     };
@@ -53,7 +53,11 @@ const AdminContactsIndex = () => {
       ) : adminContacts?.length ? (
         <>
           <Heading text={"All App Contacts"} />
-          <Pagination pages={pages} currentPage={currentPage} route={route} />
+          <Pagination
+            numberOfPages={numberOfPages}
+            currentPage={currentPage}
+            route={route}
+          />
 
           <ol className="contacts-list">
             {adminContacts?.map((contact) => (
@@ -61,7 +65,11 @@ const AdminContactsIndex = () => {
             ))}
           </ol>
 
-          <Pagination pages={pages} currentPage={currentPage} route={route} />
+          <Pagination
+            numberOfPages={numberOfPages}
+            currentPage={currentPage}
+            route={route}
+          />
         </>
       ) : (
         <NoContacts />
