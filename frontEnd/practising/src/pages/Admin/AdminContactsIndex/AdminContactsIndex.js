@@ -20,7 +20,11 @@ const AdminContactsIndex = () => {
 
   const [adminContacts, setAdminContacts] = useState([]);
   const [numberOfPages, setNumberOfPages] = useState(1);
+<<<<<<< HEAD
   const [limit] = useState(4);
+=======
+  const [limit] = useState(2);
+>>>>>>> 33e4d733c5176618d2422e51b11001db05a5de12
   const [error, setError] = useState(1);
 
   const route = "/admin/dashboard/contacts/pages/";
@@ -38,7 +42,11 @@ const AdminContactsIndex = () => {
         return setError("page not found!");
       }
 
+<<<<<<< HEAD
       setNumberOfPages(pages);
+=======
+      setNumberOfPages(numberOfPages);
+>>>>>>> 33e4d733c5176618d2422e51b11001db05a5de12
       setAdminContacts(contacts);
       setError("");
     };

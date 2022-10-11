@@ -1,7 +1,7 @@
 PROJECT TO-DO LIST:
 
 1. fix the rendering error in the Contacts component. // DONE
-2. add Pagination functionality.
+2. add Pagination functionality. // DONE
 3. add ability to sign with google, facebook and twitter.
 4. add a resend verification email after a set amount of time if
 5. make the user profile page.
