@@ -78,6 +78,7 @@
 
 .login-link,
 button.btn.logout-btn {
+  width: max-content;
   background-color: #ffffff;
   color: #0f1b25;
 }

@@ -64,7 +64,7 @@ const usePagination = (currentPage, numberOfPages, siblingsCount = 1) => {
 
       return [firstPage, DOTS, ...middleRange, DOTS, lastPage];
     }
-  }, [currentPage, numberOfPages, siblingsCount]);
+  }, [currentPage, numberOfPages, siblingsCount, rangeLimit]);
 
   return paginationRange;
 };

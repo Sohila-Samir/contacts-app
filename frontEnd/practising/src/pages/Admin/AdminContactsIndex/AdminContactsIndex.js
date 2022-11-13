@@ -44,7 +44,7 @@ const AdminContactsIndex = () => {
     };
 
     requestContactsPage();
-  }, [currentPage, limit]);
+  }, [currentPage, limit, privateInstance]);
 
   return (
     <>

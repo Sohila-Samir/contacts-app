@@ -3,4 +3,4 @@ node_modules
 dist
 src/config/roles.ts
 src/config/email-transporter.ts
-./src/data
+data

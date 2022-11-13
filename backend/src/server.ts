@@ -1,28 +1,37 @@
-export {};
+export { };
 
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
-import { Application, Request, Response } from "express";
-
-import cookieParser from "cookie-parser";
-import cors from "cors";
+// core
 import express from "express";
-import morgan from "morgan";
-import multer from "multer";
 import path from "path";
 
-import authRoutes from "./routes/auth-routes";
-import contactsRoutes from "./routes/contacts-routes";
-import emailRoutes from "./routes/email-routes";
-import userRoutes from "./routes/users-routes";
+// configs
+import connect from "./configs/mongodb.configs";
+import googleAuth from "./configs/passportGoogleOauth2";
+import { connectRedis } from "./configs/redis.configs";
+import "./utils/auth/generateJwtKeyPairs.utils";
 
-import connect from "./config/database";
-import { connectRedis } from "./config/redis";
-import "./utils/auth/generateJwtKeyPairs";
+// global middleware
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import session from "express-session";
+import helmet from "helmet";
+import morgan from "morgan";
+import multer from "multer";
+import passport from "passport";
+import errorHandler from "./middleware/error.middleware";
 
-import errorHandler from "./middlewares/error";
+// routes
+import authRoutes from "./routes/auth.routes";
+import contactsRoutes from "./routes/contact.routes";
+import emailRoutes from "./routes/email.routes";
+import userRoutes from "./routes/user.routes";
+
+// ts types
+import { Application, Request, Response } from "express";
 
 // connect to database
 connect();
@@ -38,6 +47,20 @@ app.listen(port, () => {
   console.log(`running on port: ${port}`);
 });
 
+// session config
+app.use(
+  session({
+    secret: "session-secret-123456789",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+// passport config
+app.use(passport.initialize());
+app.use(passport.session());
+googleAuth(passport);
+
 // multer config
 const storage = multer.memoryStorage();
 export const upload = multer({ storage });
@@ -47,7 +70,8 @@ app.use(express.static(path.join(__dirname, "uploads")));
 app.use(express.static(path.join(__dirname, "../src/views")));
 app.use(express.static(path.join(__dirname, "../src/public")));
 
-// middlewares
+// middleware
+app.use(helmet())
 app.use(morgan("dev"));
 app.use(
   cors({

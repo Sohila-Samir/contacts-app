@@ -6,7 +6,10 @@ import Button from "./../../components/Main/Button/Button";
 import CustomLink from "./../../components/Main/CustomLink/CustomLink";
 import FormInput from "./../../components/Main/FormInput/FormInput";
 
-import { login } from "../../axios/api-endpoints/auth-endpoints";
+import {
+  login,
+  loginWithGoogle,
+} from "../../axios/api-endpoints/auth-endpoints";
 import useAuth from "../../hooks/useAuth";
 import useDetectCapsLockState from "../../hooks/useDetectCapsLockState";
 
@@ -28,19 +31,7 @@ const Login = () => {
     confirmPassword: "",
   });
 
-  useEffect(() => {
-    setFormHeading();
-    checkPersistenceState();
-  }, []);
-
-  useEffect(() => {
-    document.addEventListener("keyup", handleCapsLockState);
-
-    return () => {
-      document.removeEventListener("keyup", handleCapsLockState);
-    };
-  }, [handleCapsLockState]);
-
+  // helper functions
   const matchPasswords = () => {
     const pwd = document.querySelector("#password");
 
@@ -83,19 +74,25 @@ const Login = () => {
       : (isTrustDevice.checked = false);
   };
 
-  const requestLogin = async (signal) => {
-    const res = await login(loginFormData, signal);
+  const requestLogin = async (signal, loginMethod = "local") => {
+    let res;
+
+    if (loginMethod === "local") {
+      res = await login(loginFormData, signal);
+    }
+
+    if (loginMethod === "google") {
+      res = await loginWithGoogle(signal);
+    }
 
     if (!res.success) setErrorMessage(res.message);
 
-    const trustDeviceBtn = document.querySelector(".trustDevice");
+    console.log("res: ", res);
 
     if (res?.data?.accessToken) {
-      trustDeviceBtn.checked
-        ? localStorage.setItem("persist", "$persistCode@74123698")
-        : localStorage.removeItem("persist");
+      console.log(res);
 
-      handleAuthData(res.data);
+      handleAuthData(res?.data);
 
       navigate(from, { replace: true });
     }
@@ -106,14 +103,32 @@ const Login = () => {
 
     if (matchPasswords()) {
       const controller = new AbortController();
-      requestLogin(controller.signal);
+      requestLogin(controller.signal, "local");
     }
   };
+
+  const onClickLoginGoogle = (e) => {
+    const controller = new AbortController();
+    requestLogin(controller.signal, "google");
+  };
+
+  useEffect(() => {
+    setFormHeading();
+    checkPersistenceState();
+    document.addEventListener("keyup", handleCapsLockState);
+
+    return () => {
+      document.removeEventListener("keyup", handleCapsLockState);
+    };
+  }, []);
 
   return (
     <>
       <section className="login-container">
         <form action="" onSubmit={handleSubmit} className="login-form">
+          <h1 className="sign-in__logo">
+            <a href="/">Conta</a>
+          </h1>
           <h2>{heading}</h2>
           <FormInput
             id="email"
@@ -147,6 +162,7 @@ const Login = () => {
             />
             <label htmlFor="trustDevice">Trust this device?</label>
           </div>
+
           <Button
             isSecondary={false}
             className="submit-login-form"
@@ -159,6 +175,28 @@ const Login = () => {
             custom={true}
             className="register-link"
           />
+
+          <div className="sign-in__or-line">
+            <span className="sign-in__or-line__left"></span>
+            <span className="sign-in__or-line__text">or</span>
+            <span className="sign-in__or-line__right"></span>
+          </div>
+
+          <div className="sign-in__other-options">
+            <button
+              type="button"
+              onClick={onClickLoginGoogle}
+              className="sign-in__other-options__google"
+            ></button>
+            <button
+              type="button"
+              className="sign-in__other-options__facebook"
+            ></button>
+            <button
+              type="button"
+              className="sign-in__other-options__twitter"
+            ></button>
+          </div>
         </form>
       </section>
     </>

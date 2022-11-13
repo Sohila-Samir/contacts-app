@@ -2,7 +2,7 @@
   display: grid;
   place-content: center;
   width: 100%;
-  max-width: 110px;
+  /* max-width: 110px; */
   padding: 0.7rem 2rem;
   text-decoration: none;
   font-size: 1rem;

@@ -1,18 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 
-import Contact from "../../components/Contact/Contact";
+import useAuth from "../../hooks/useAuth";
+
 import CustomLink from "../../components/Main/CustomLink/CustomLink";
 import Heading from "../../components/Main/Heading/Heading";
 import Pagination from "../../components/Pagination/Pagination";
 import NoContacts from "../errors/NoContacts/NoContacts";
-import NotFound from "../errors/NotFound/NotFound";
 
-import { getUserContacts } from "../../axios/api-endpoints/Contact-endpoints";
+// import { getUserContacts } from "../../axios/api-endpoints/Contact-endpoints";
 
-import usePrivateInstance from "../../hooks/usePrivateInstance";
-import useContacts from "./../../hooks/useContacts";
-
+import axios from "axios";
 import "./Contacts.css";
 
 const Contacts = () => {
@@ -20,51 +19,89 @@ const Contacts = () => {
 
   const [limit] = useState(4);
   const [numberOfPages, setNumberOfPages] = useState(1);
-  const [error, setError] = useState();
+  const { authData } = useAuth();
+  // const [error, setError] = useState();
 
-  const privateInstance = usePrivateInstance();
-  const { contacts, dispatch } = useContacts();
+  // const privateInstance = usePrivateInstance();
+  // const { contacts, dispatch } = useContacts();
 
   const currentPage = Number(pageNum) || 1;
   const route = "/contacts/pages/";
-  useEffect(() => {
-    const fetchContacts = async () => {
-      const { contacts, pages } = await getUserContacts(
-        privateInstance,
-        currentPage,
-        limit
-      );
 
-      if (currentPage > pages) return setError("page not found!");
+  const getContacts = () => {
+    return axios.get(
+      `http://localhost:2022/api/contacts/index/user/${authData?.user}`
+    );
+  };
 
-      setNumberOfPages(pages);
-      dispatch({ type: "SET_CONTACTS", payload: contacts });
-    };
+  const onSuccessFetchingContacts = (data) => {
+    console.log("the after success data: ", data);
+    setNumberOfPages(contacts?.data?.data?.pages);
+  };
 
-    fetchContacts();
-  }, [dispatch, privateInstance, currentPage]);
+  const {
+    data: contacts,
+    isLoading,
+    isError,
+    error,
+    isFetching,
+  } = useQuery(["GET /contacts", limit, currentPage], getContacts, {
+    keepPreviousData: true,
+    onSuccess: onSuccessFetchingContacts,
+  });
+
+  if (isError) {
+    return <h1>{error.message}</h1>;
+  }
+
+  if (isLoading) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (isFetching) {
+    return <h1>Fetching...</h1>;
+  }
+
+  // useEffect(() => {
+  //   const fetchContacts = async () => {
+  //     const { contacts, pages } = await getUserContacts(
+  //       privateInstance,
+  //       currentPage,
+  //       limit
+  //     );
+
+  //     if (currentPage > pages) return setError("page not found!");
+
+  //     setNumberOfPages(pages);
+  //     dispatch({ type: "SET_CONTACTS", payload: contacts });
+  //   };
+
+  //   fetchContacts();
+  // }, [dispatch, privateInstance, currentPage]);
 
   return (
     <main>
-      {error ? (
-        <NotFound />
-      ) : !contacts?.length ? (
+      {!contacts?.data?.data?.contacts.length ? (
         <NoContacts />
       ) : (
         <>
           <Heading text="Your Contacts" />
-
           <Pagination
             numberOfPages={numberOfPages}
             currentPage={currentPage}
             route={route}
           />
 
-          <ol className="contacts-list">
-            {contacts?.map((contact) => (
-              <Contact key={contact?._id} contact={contact} />
-            ))}
-          </ol>
+          {isLoading || isFetching ? (
+            <h1>Loading...</h1>
+          ) : (
+            <h1>fetched successfully!</h1>
+            // <ol className="contacts-list">
+            //   {/* {contacts?.map((contact) => (
+            //     <Contact key={contact?._id} contact={contact} />
+            //   ))} */}
+            // </ol>
+          )}
 
           <Pagination
             numberOfPages={numberOfPages}
@@ -85,23 +122,3 @@ const Contacts = () => {
 };
 
 export default Contacts;
-
-/*
-  - user successfully registers
-  - authData gets populated with the [accessToken, roles, userID, verified]
-  - user gets redirected to home page or the page he was trying to access
-  - i.e: user was redirected to Contacts page
-    - contacts page renders initially and request the user contacts using accessToken (1)
-    - server respond with user contacts
-    - client populate the contacts array state
-    - contacts page re-render (2)
-      - suppose user went to another page and then headed back to the contacts page
-      after accessToken has expired.
-      - Contacts page will render again (1)
-      - requests the new contacts
-      - private instance detects expired accessToken
-      - private instance requests new accessToken
-      - server respond with new auth credentials
-      - private instance re-populate the authData state
-      - Contacts Page re-render
- */

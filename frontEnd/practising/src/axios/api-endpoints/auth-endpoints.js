@@ -5,7 +5,7 @@ const api = "http://localhost:2022/api/";
 
 export const login = async (data, signal) => {
   try {
-    const res = await authInstance.post("login", data, { signal });
+    const res = await authInstance.post("login/local", data, { signal });
     console.log(res.data);
     return res.data;
   } catch (err) {
@@ -89,5 +89,17 @@ export const resetPassword = async (signal, data, resetTkn) => {
     if (!err.response.data.success) return err.response.data;
     console.log("reset password fetch error: ", err.response);
     return err;
+  }
+};
+
+export const loginWithGoogle = async (signal) => {
+  try {
+    const res = await authInstance.get(
+      "http://localhost:2022/api/auth/google",
+      { signal }
+    );
+    return res.data;
+  } catch (err) {
+    console.log("login with google request error: ", err);
   }
 };
