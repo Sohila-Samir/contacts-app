@@ -4,8 +4,6 @@ import * as contactsControllers from "../controllers/contact.controllers";
 import ROLES from "../configs/roles.configs";
 import authRole from "../middleware/auth/authRole.middleware";
 import verifyUser from "../middleware/auth/verifyUserAccessToken.middleware";
-import handleContactImage from "../middleware/contacts/handleContactImage.middleware";
-import handleDeleteContactImg from "../middleware/contacts/handleDeleteContactImg.middleware";
 import handleUpdateContactImg from "../middleware/contacts/handleUpdateContactImg.middleware";
 
 
@@ -14,7 +12,7 @@ const router: IRouter = express.Router();
 router.post(
   "/new",
   verifyUser,
-  handleContactImage,
+  handleUpdateContactImg,
   contactsControllers.newContact
 );
 
@@ -33,14 +31,13 @@ router.put(
   "/:id/update",
   verifyUser,
   handleUpdateContactImg,
-  handleContactImage,
   contactsControllers.updateContact
 );
 
 router.delete(
   "/:id/delete",
   verifyUser,
-  handleDeleteContactImg,
+  handleUpdateContactImg,
   contactsControllers.deleteContact
 );
 

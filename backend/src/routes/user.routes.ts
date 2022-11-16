@@ -2,6 +2,7 @@ import express, { IRouter } from "express";
 
 import authRole from "../middleware/auth/authRole.middleware";
 import verifyUserAccessToken from "../middleware/auth/verifyUserAccessToken.middleware";
+import handleUpdateUserImg from "../middleware/users/handleUpdateUserImg.middleware";
 import * as userPermissions from "../permissions/user.permissions";
 
 import ROLES from "../configs/roles.configs";
@@ -32,6 +33,7 @@ router.delete(
   "/:id/delete",
   verifyUserAccessToken,
   userPermissions.authDeleteUser,
+  handleUpdateUserImg,
   userHandleFunctions.deleteUser
 );
 

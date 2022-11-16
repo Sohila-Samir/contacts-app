@@ -1,35 +1,46 @@
 import { NextFunction, Request, Response } from "express"
-import fs from "fs"
-import path from "path"
-import { UserDoc } from "../../interfaces/user.interfaces"
+
 import { UserModel } from "../../models/mongoose/User.models"
+
+import { UserDoc } from "../../interfaces/user.interfaces"
 import { SharpOptions } from "../../types/sharp.types"
+
+import deleteImage from "../../utils/images/deleteImage.utils"
 import resizeAndSaveImg from "../../utils/images/resizeImage.utils"
-import ExpressError from "../../utils/main/ExpressError.utils"
 
 /*
+  *CASES WHEN NOT TO DELETE AND CREATE A NEW IMAGE (add image for the first time)
+  - user provided an image and user document has no image field (null).
+
   *CASES WHEN TO DELETE THE CURRENT IMAGE AND CREATE A NEW ONE
   - user provided new image and there is a current image.
-  - user has no current image and now is uploading a one. TODO: check this case
 
   *CASES WHEN TO DELETE CURRENT IMAGE BUT NOT CREATE A NEW ONE:
   - user deleted the userImg field from the client side (wants to remove the current picture).
 
   *CASES WHEN NOT TO DELETE CURRENT IMAGE NOR CREATE A NEW ONE:
   - user did not upload a new image nor requested deleting the current image.
+  - user is creating a new account and did not provide an image.
 */
 const handleUpdateUserImg = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  if (!req.file && req.body.userImg) return next()
+  //* BE CAREFUL WITH THE CREATE USER SCENARIO  (THERE IS NO "ID" PARAM ALREADY).
 
   const { id } = req.params
 
   const user: UserDoc | null = await UserModel.findById(id)
 
-  const userCurrentImgRelPath = user?.userImg as string
+  const userCurrentImagePath = user?.userImg as string
 
-  if ((req.file && userCurrentImgRelPath && req.body.userImg)
-    || (req.file && !userCurrentImgRelPath && req.body.userImg)) {
+  // handle CASES WHEN NOT TO DELETE CURRENT IMAGE NOR CREATE A NEW ONE.
+  if ((!req.file && !req.body.userImg) || (!req.file && req.body.userImg.toString() === userCurrentImagePath?.toString())) return next()
 
+  // handle CASES WHEN TO DELETE THE CURRENT IMAGE.
+  if (userCurrentImagePath && (req.file && req.body.userImg) || (!req.file && !req.body.userImg)) {
+    deleteImage(userCurrentImagePath)
+  }
+
+  // handle CASES WHEN TO CREATE NEW IMAGE.
+  if (req.file && req.body.userImg && (!userCurrentImagePath || userCurrentImagePath)) {
     const sharpOptions: SharpOptions = {
       folderName: req.file.fieldname,
       imgName: req.file.originalname,
@@ -45,10 +56,6 @@ const handleUpdateUserImg = async (req: Request, res: Response, next: NextFuncti
       res.locals.userImgRelativePath = imgRelativePath
     }
   }
-
-  fs.unlink(path.join(__dirname, "..", "..", "uploads", userCurrentImgRelPath), (err: unknown) => {
-    if (err && err instanceof Error) next(new ExpressError(err?.message, 400, (err?.name || "DeleteUserImgError")))
-  })
 }
 
 export default handleUpdateUserImg

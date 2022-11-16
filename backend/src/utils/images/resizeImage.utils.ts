@@ -12,14 +12,17 @@ import ExpressError from "../main/ExpressError.utils";
     format: "png" | "jpeg" | "jpg";
     folderName: string;
     imgRelativePath: string;}`
-  @returns boolean (true) on a successful resize and saving image operation. otherwise throws an error.
+  @returns the image relative path if it is successfully stored in the file system.
 */
 const resizeAndSaveImg = (
   sharpOptions: SharpOptions
 ): string => {
   const uniqueSuffix = Date.now()
+
   const imgStorageUniqueName = `${uniqueSuffix}_${sharpOptions.imgName}`
+
   const imgRelativePath = `/${sharpOptions.folderName}/${imgStorageUniqueName}`
+
   const imgFolderAbsolutePath = path.join(
     __dirname,
     "..",

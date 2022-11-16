@@ -14,7 +14,7 @@ export type ContactDoc = {
   name: string;
   handle: string;
   phoneNumberInfo: ContactPhoneInputInfo;
-  contactImage?: string;
+  contactImg?: string;
   email?: string;
   address?: string;
   category?: "family" | "friends" | "co-workers" | "relatives" | "";

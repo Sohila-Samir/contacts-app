@@ -4,11 +4,12 @@ import passport from "passport";
 import * as authHandleFunctions from "../controllers/auth.controllers";
 import { CustomPassportAuthInfo } from "../interfaces/auth.interfaces";
 import verifyUserAccessToken from "../middleware/auth/verifyUserAccessToken.middleware";
+import handleUpdateUserImg from "../middleware/users/handleUpdateUserImg.middleware";
 import ExpressError from "../utils/main/ExpressError.utils";
 
 const router: IRouter = express.Router();
 
-router.post("/sign-in/local", authHandleFunctions.signIn);
+router.post("/sign-in", handleUpdateUserImg, authHandleFunctions.signIn);
 
 router.get(
   "/google",

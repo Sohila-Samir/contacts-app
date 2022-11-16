@@ -14,7 +14,7 @@ import { UserDoc } from "../../interfaces/user.interfaces";
 import {
   ContactDoc,
   ContactIndexReturnData,
-  ContactPhoneInputInfo,
+  ContactPhoneInputInfo
 } from "../../types/contact.types";
 
 const contactsSchema = new Schema<ContactDoc>({
@@ -35,7 +35,7 @@ const contactsSchema = new Schema<ContactDoc>({
     maxlength: 30,
     trim: true,
   },
-  contactImage: {
+  contactImg: {
     type: String,
     default: null,
   },
