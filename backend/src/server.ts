@@ -50,7 +50,7 @@ app.listen(port, () => {
 // session config
 app.use(
   session({
-    secret: "session-secret-123456789",
+    secret: process.env.SESSION_SECRET as string,
     resave: false,
     saveUninitialized: false,
   })
@@ -67,8 +67,6 @@ export const upload = multer({ storage });
 
 // serving static files
 app.use(express.static(path.join(__dirname, "uploads")));
-app.use(express.static(path.join(__dirname, "../src/views")));
-app.use(express.static(path.join(__dirname, "../src/public")));
 
 // middleware
 app.use(helmet())
@@ -85,9 +83,9 @@ app.use(express.json());
 
 // using routes
 app.use("/api", emailRoutes);
-app.use("/api/contacts", upload.single("contactAvatar"), contactsRoutes);
-app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/users", upload.single("userImg"), userRoutes);
+app.use("/api/contacts", upload.single("contactImg"), contactsRoutes);
 
 // error handlers
 app.get("*", (req: Request, res: Response) => {

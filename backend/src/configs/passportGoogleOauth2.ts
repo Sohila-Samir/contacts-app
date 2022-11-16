@@ -11,7 +11,6 @@ import ExpressError from "../utils/main/ExpressError.utils";
 
 // interfaces
 import { UserAuthTokens } from "../interfaces/auth.interfaces";
-import { UserDoc } from "../interfaces/user.interfaces";
 import constructUserCredentials from "../utils/auth/constructUserCredentials.utils";
 import ROLES from "./roles.configs";
 
@@ -38,7 +37,7 @@ const googleVerifyCb = async (
         roles: [ROLES.USER],
         name: profile?.name,
         username: profile?.username,
-        userAvatar: profile?.photos?.[0],
+        userImg: profile?.photos?.[0],
         verified: profile?.emails?.[0].verified,
       });
     } else {
@@ -59,8 +58,8 @@ const googleVerifyCb = async (
 
     done(null, dataToSend, { accessToken, refreshToken } as UserAuthTokens);
   } catch (err: unknown) {
-    if (err instanceof ExpressError || Error) {
-      done(err as Error);
+    if (err instanceof (ExpressError || Error)) {
+      return done(err);
     }
   }
 };
@@ -72,23 +71,20 @@ const googleAuth = (passport: any) => {
         clientID,
         clientSecret,
         callbackURL: redirectUrl,
-        scope: ["profile"],
+        scope: ["profile", "email"],
       },
       googleVerifyCb
     )
   );
 };
 
-passport.serializeUser((user, done) => {
-  done(null, user);
+passport.serializeUser((user: any, done) => {
+  return done(null, user?._id);
 });
 
-passport.deserializeUser(async (user: UserDoc, done) => {
-  const foundUser = await UserModel.findById(user._id);
-
-  if (foundUser) return done(null, foundUser);
-
-  return done(false, null);
+passport.deserializeUser(async (id, done) => {
+  const user = await UserModel.findById(id)
+  return done(false, user);
 });
 
 export default googleAuth;
